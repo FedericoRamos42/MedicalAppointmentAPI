@@ -17,6 +17,8 @@ namespace Application.Mappers
             Email = patient.Email,
             Address = patient.Address,
             PhoneNumber = patient.PhoneNumber,
+            HealtInsurance = patient.HealtInsurance.ToString(),
+            IsAvailable = patient.IsAvailable,
         };
 
        

@@ -4,6 +4,7 @@ using Application.Models;
 using Application.Models.Request;
 using Application.Result;
 using Domain.Entities;
+using Domain.Enums;
 using Domain.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -32,6 +33,8 @@ namespace Application.Services
                 Email = request.Email,
                 Address = request.Address,
                 Password = request.Password,
+                //HealtInsurance = request.HealtInsurance,
+                IsAvailable = request.IsAvailable
             };
             await _repository.AddAsync(patient);
             var dto = patient.ToDto();
@@ -64,6 +67,9 @@ namespace Application.Services
             patient.PhoneNumber = request.PhoneNumber;
             patient.Email = request.Email;
             patient.Address = request.Address;
+            //patient.HealtInsurance = request.HealtInsurance,
+            patient.IsAvailable = request.IsAvailable;    
+
             await _repository.UpdateAsync(patient); 
             var dto = patient.ToDto();  
             return Result<PatientDto>.Success(dto);
