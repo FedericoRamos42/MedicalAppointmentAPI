@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Domain.Enums;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -14,7 +15,7 @@ namespace Application.Models.Request
         public string Address { get; set; } = string.Empty;
         public string Email { get; set; } = string.Empty;
         public string Password { get; set; } = string.Empty;
-        public string HealtInsurance { get; set; } = string.Empty;
+        public HealtInsurance HealtInsurance { get; set; } 
         public bool IsAvailable { get; set; } = true;
 
     }
