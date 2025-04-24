@@ -1,5 +1,4 @@
-﻿
-using Application.Models;
+﻿using Application.Models;
 using Domain.Entities;
 
 namespace Application.Mappers
@@ -13,5 +12,8 @@ namespace Application.Mappers
             StartTime = schedule.StartTime,
             EndTime = schedule.EndTime,
         };
+        public static List<ScheduleDto> ToListDto(this IEnumerable<Schedule> schedule) =>schedule.Select(x => ToDto(x)).ToList();
+
+
     }
 }
