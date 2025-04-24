@@ -35,6 +35,14 @@ namespace Application.Services
 
         }
 
+        public async Task<Result<ScheduleDto>> Delete(int Id)
+        {
+            var schedule = await _schedules.GetByIdAsync(Id);
+            await _schedules.DeleteAsync(schedule);
+            var dto = schedule.ToDto();
+            return Result<ScheduleDto>.Success(dto);
+        }
+
         public async Task<Result<IEnumerable<ScheduleDto>>> GetByDoctor(int id)
         {
             var schedules = await _schedules.Search(s=>s.DoctorId == id);

@@ -35,6 +35,13 @@ namespace Web.Controllers
             return Ok(shedule);
         }
 
+        [HttpDelete("{id}")]
+        public async Task<IActionResult>Delete(int id)
+        {
+            var shedule = await _service.Delete(id);
+            return Ok(shedule);
+        }
+
 
     }
 }
