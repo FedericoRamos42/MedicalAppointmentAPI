@@ -10,5 +10,7 @@ namespace Infrastructure.Data
         {
             _context = context;
         }
+
+       
     }
 }

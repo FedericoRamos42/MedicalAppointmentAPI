@@ -12,5 +12,6 @@ namespace Application.Interfaces
     public interface IScheduleService
     {
         Task<Result<ScheduleDto>> Create(ScheduleCreateRequest request);
+        Task<Result<IEnumerable<ScheduleDto>>> GetByDoctor(int id);
     }
 }

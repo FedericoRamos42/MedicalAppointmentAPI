@@ -1,4 +1,5 @@
-﻿using Application.Interfaces;
+﻿using System.Collections.Generic;
+using Application.Interfaces;
 using Application.Mappers;
 using Application.Models;
 using Application.Models.Request;
@@ -32,6 +33,14 @@ namespace Application.Services
             return Result<ScheduleDto>.Success(dto);
             
 
+        }
+
+        public async Task<Result<IEnumerable<ScheduleDto>>> GetByDoctor(int id)
+        {
+            var schedules = await _schedules.Search(s=>s.DoctorId == id);
+
+            var dto = schedules.ToListDto();
+            return Result<IEnumerable <ScheduleDto>>.Success(dto);
         }
     }
 }
