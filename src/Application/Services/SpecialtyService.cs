@@ -41,7 +41,9 @@ namespace Application.Services
         }
         public async Task<Result<IEnumerable<SpecialtyDto>>> GetAll()
         {
-            
+            IEnumerable<Specialty> list = await _repository.GetAllAsync();
+            var dto = list.ToListDto();
+            return Result<IEnumerable<SpecialtyDto>>.Success(dto);
         }
         public async Task<Result<SpecialtyDto>> GetById(int id)
         {
