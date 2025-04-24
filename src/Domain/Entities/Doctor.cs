@@ -8,6 +8,7 @@ namespace Domain.Entities
         public int SpecialtyId { get; set; }
         public List<Appointment> Appoinments { get; set; } = new List<Appointment>();
         public List<MedicalHistory> MedicalHistories { get; set; } = new List<MedicalHistory>();
+        public List<Schedule> Schedules { get; set; } = new List<Schedule>();
 
         public Doctor()
         {

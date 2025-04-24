@@ -12,6 +12,7 @@ namespace Application.Mappers
     {
         public static AdminDto ToDto(this Admin admin) => new AdminDto
         {
+            Id = admin.Id,
             Name = admin.Name,
             LastName = admin.LastName,
             Email = admin.Email,

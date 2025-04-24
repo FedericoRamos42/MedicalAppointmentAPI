@@ -3,6 +3,7 @@ using System;
 using Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250424200518_SheduleManagement")]
+    partial class SheduleManagement
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "9.0.4");
@@ -105,7 +108,7 @@ namespace Infrastructure.Migrations
                     b.ToTable("MedicalHistory", (string)null);
                 });
 
-            modelBuilder.Entity("Domain.Entities.Schedule", b =>
+            modelBuilder.Entity("Domain.Entities.Shedule", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -134,7 +137,7 @@ namespace Infrastructure.Migrations
 
                     b.HasIndex("DoctorId");
 
-                    b.ToTable("Schedule", (string)null);
+                    b.ToTable("Shedule", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.Specialty", b =>
@@ -299,10 +302,10 @@ namespace Infrastructure.Migrations
                     b.Navigation("Patient");
                 });
 
-            modelBuilder.Entity("Domain.Entities.Schedule", b =>
+            modelBuilder.Entity("Domain.Entities.Shedule", b =>
                 {
                     b.HasOne("Domain.Entities.Doctor", "Doctor")
-                        .WithMany("Schedules")
+                        .WithMany("Shedules")
                         .HasForeignKey("DoctorId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -337,7 +340,7 @@ namespace Infrastructure.Migrations
 
                     b.Navigation("MedicalHistories");
 
-                    b.Navigation("Schedules");
+                    b.Navigation("Shedules");
                 });
 
             modelBuilder.Entity("Domain.Entities.Patient", b =>
