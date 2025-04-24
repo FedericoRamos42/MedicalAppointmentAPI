@@ -32,15 +32,18 @@ namespace Application.Services
             var dto = specialty.ToDto();
             return Result<SpecialtyDto>.Success(dto);
         }
-        public Task<Result<SpecialtyDto>> Delete(int id)
+        public async Task<Result<SpecialtyDto>> Delete(int id)
         {
-
+            Specialty specialty = await _repository.GetByIdAsync(id);
+            await _repository.DeleteAsync(specialty);
+            var dto = specialty.ToDto();
+            return Result<SpecialtyDto>.Success(dto);
         }
-        public Task<Result<IEnumerable<SpecialtyDto>>> GetAll()
+        public async Task<Result<IEnumerable<SpecialtyDto>>> GetAll()
         {
             
         }
-        public Task<Result<SpecialtyDto>> GetById(int id)
+        public async Task<Result<SpecialtyDto>> GetById(int id)
         {
             
         }
