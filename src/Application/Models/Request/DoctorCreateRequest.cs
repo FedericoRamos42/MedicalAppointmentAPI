@@ -13,6 +13,7 @@ namespace Application.Models.Request
         public string PhoneNumber { get; set; } = string.Empty;
         public string Address { get; set; } = string.Empty;
         public string Email { get; set; } = string.Empty;
+        public string Password { get; set; } = default!;
         public int SpecialtyId { get; set; }
         public bool IsAvailable { get; set; } = true;
     }

@@ -4,10 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Domain.Entities;
+using Domain.Enums;
 
 namespace Domain.Interfaces
 {
     public interface IScheduleRepository : IBaseRepository<Schedule>
     {
+        Task<Schedule>GetByDoctorAndDate(int doctorId, SheduleDay day);
     }
 }

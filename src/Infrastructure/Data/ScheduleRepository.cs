@@ -1,5 +1,7 @@
 ﻿using Domain.Entities;
+using Domain.Enums;
 using Domain.Interfaces;
+using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Data
 {
@@ -11,6 +13,10 @@ namespace Infrastructure.Data
             _context = context;
         }
 
-       
+        public async Task<Schedule> GetByDoctorAndDate(int doctorId, SheduleDay day)
+        {
+            var schedule = await _context.Schedules.FirstOrDefaultAsync(s=> s.DoctorId == doctorId && s.DayOfWeek == day);
+            return schedule;
+        }
     }
 }

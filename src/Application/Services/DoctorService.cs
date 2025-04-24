@@ -25,6 +25,7 @@ namespace Application.Services
                 PhoneNumber = request.PhoneNumber,
                 Email = request.Email,
                 Address = request.Address,
+                Password = request.Password,
                 SpecialtyId = request.SpecialtyId,
                 IsAvailable = request.IsAvailable
             };

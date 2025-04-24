@@ -13,17 +13,26 @@ namespace Web.Controllers
         {
             _service = service;
         }
+
         [HttpGet("doctor/{id}")]
         public async Task<IActionResult> GetByDoctor(int id)
         {
             var list = await _service.GetByDoctor(id);
             return Ok(list);
         }
+
         [HttpPost]
         public async Task<IActionResult> Create([FromBody]ScheduleCreateRequest request)
         {
             var schedule = await _service.Create(request);
             return Ok(schedule);    
+        }
+
+        [HttpPut]
+        public async Task<IActionResult> Update([FromBody]ScheduleUpdateRequest request)
+        {
+            var shedule = await _service.Update(request);
+            return Ok(shedule);
         }
 
 

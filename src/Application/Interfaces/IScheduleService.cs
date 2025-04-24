@@ -13,5 +13,7 @@ namespace Application.Interfaces
     {
         Task<Result<ScheduleDto>> Create(ScheduleCreateRequest request);
         Task<Result<IEnumerable<ScheduleDto>>> GetByDoctor(int id);
+        Task<Result<ScheduleDto>> Update(ScheduleUpdateRequest request);
+
     }
 }

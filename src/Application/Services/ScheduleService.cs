@@ -42,5 +42,18 @@ namespace Application.Services
             var dto = schedules.ToListDto();
             return Result<IEnumerable <ScheduleDto>>.Success(dto);
         }
+
+        public async Task<Result<ScheduleDto>> Update(ScheduleUpdateRequest request)
+        {
+            Schedule schedule = await _schedules.GetByDoctorAndDate(request.DoctorId,request.DayOfWeek);
+
+            schedule.StartTime = request.StartTime;
+            schedule.EndTime = request.EndTime;
+
+            await _schedules.UpdateAsync(schedule);
+
+            var dto = schedule.ToDto();
+            return Result<ScheduleDto>.Success(dto);
+        }
     }
 }

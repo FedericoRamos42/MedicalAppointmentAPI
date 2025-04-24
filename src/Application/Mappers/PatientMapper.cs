@@ -12,6 +12,7 @@ namespace Application.Mappers
     {
         public static PatientDto ToDto(this Patient patient) => new PatientDto
         {
+            Id = patient.Id,
             Name = patient.Name,
             LastName = patient.LastName,
             Email = patient.Email,
