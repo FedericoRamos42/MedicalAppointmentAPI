@@ -47,7 +47,9 @@ namespace Application.Services
         }
         public async Task<Result<SpecialtyDto>> GetById(int id)
         {
-            
+            Specialty specialty = await _repository.GetByIdAsync(id);
+            var dto = specialty.ToDto();
+            return Result<SpecialtyDto>.Success(dto);
         }
     }
 }
