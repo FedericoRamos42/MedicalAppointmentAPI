@@ -19,49 +19,57 @@ namespace Application.Services
         }
         public async Task<Result<ScheduleDto>> Create(ScheduleCreateRequest request)
         {
-            Schedule schedule = new Schedule()
-            {
-                DoctorId = request.DoctorId,
-                DayOfWeek = request.DayOfWeek,
-                StartTime = request.StartTime,
-                EndTime = request.EndTime,
-            };
+            //Schedule schedule = new Schedule()
+            //{
+            //    DoctorId = request.DoctorId,
+            //    DayOfWeek = request.DayOfWeek,
+            //    StartTime = request.StartTime,
+            //    EndTime = request.EndTime,
+            //};
 
-            await _schedules.AddAsync(schedule);
+            //await _schedules.AddAsync(schedule);
 
-            var dto = schedule.ToDto();
-            return Result<ScheduleDto>.Success(dto);
-            
+            //var dto = schedule.ToDto();
+            //return Result<ScheduleDto>.Success(dto);
+            throw new NotImplementedException();
+
+
 
         }
 
         public async Task<Result<ScheduleDto>> Delete(int Id)
         {
-            var schedule = await _schedules.GetByIdAsync(Id);
-            await _schedules.DeleteAsync(schedule);
-            var dto = schedule.ToDto();
-            return Result<ScheduleDto>.Success(dto);
+            //var schedule = await _schedules.GetByIdAsync(Id);
+            //await _schedules.DeleteAsync(schedule);
+            //var dto = schedule.ToDto();
+            //return Result<ScheduleDto>.Success(dto);
+            throw new NotImplementedException();
+
         }
 
         public async Task<Result<IEnumerable<ScheduleDto>>> GetByDoctor(int id)
         {
-            var schedules = await _schedules.Search(s=>s.DoctorId == id);
+            //var schedules = await _schedules.Search(s=>s.DoctorId == id);
 
-            var dto = schedules.ToListDto();
-            return Result<IEnumerable <ScheduleDto>>.Success(dto);
+            //var dto = schedules.ToListDto();
+            //return Result<IEnumerable <ScheduleDto>>.Success(dto);
+            throw new NotImplementedException();
+
         }
 
         public async Task<Result<ScheduleDto>> Update(ScheduleUpdateRequest request)
         {
-            Schedule schedule = await _schedules.GetByDoctorAndDate(request.DoctorId,request.DayOfWeek);
+            //Schedule schedule = await _schedules.GetByDoctorAndDate(request.DoctorId,request.DayOfWeek);
 
-            schedule.StartTime = request.StartTime;
-            schedule.EndTime = request.EndTime;
+            //schedule.StartTime = request.StartTime;
+            //schedule.EndTime = request.EndTime;
 
-            await _schedules.UpdateAsync(schedule);
+            //await _schedules.UpdateAsync(schedule);
 
-            var dto = schedule.ToDto();
-            return Result<ScheduleDto>.Success(dto);
+            //var dto = schedule.ToDto();
+            //return Result<ScheduleDto>.Success(dto);
+            throw new NotImplementedException();
+
         }
     }
 }

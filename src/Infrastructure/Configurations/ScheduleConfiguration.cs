@@ -14,14 +14,12 @@ namespace Infrastructure.Configurations
 
             builder.HasKey(x => x.Id);
 
-            builder.HasOne(s => s.Doctor)
-                   .WithMany(d => d.Schedules)
-                   .HasForeignKey(s => s.DoctorId)
+            builder.HasMany(s => s.Availabilities)
+                   .WithOne(s => s.Schedule)
+                   .HasForeignKey(s => s.ScheduleId)
                    .IsRequired();
 
-            builder.Property(s =>s.DayOfWeek)
-                 .HasConversion(new EnumToStringConverter<SheduleDay>())
-                 .IsRequired();
+            
 
         }
     }

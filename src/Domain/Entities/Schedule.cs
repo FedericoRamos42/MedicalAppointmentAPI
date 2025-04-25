@@ -7,9 +7,7 @@ namespace Domain.Entities
     {
         public int DoctorId { get; set; }
         public Doctor Doctor { get; set; } = default!;
-        public SheduleDay DayOfWeek { get; set; }
-        public TimeSpan StartTime { get; set; }
-        public TimeSpan EndTime { get; set; }
+        public IEnumerable<Availability> Availabilities { get; set; } = new List<Availability>();
     }
 
 }

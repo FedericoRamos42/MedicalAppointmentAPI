@@ -15,8 +15,10 @@ namespace Infrastructure.Data
 
         public async Task<Schedule> GetByDoctorAndDate(int doctorId, SheduleDay day)
         {
-            var schedule = await _context.Schedules.FirstOrDefaultAsync(s=> s.DoctorId == doctorId && s.DayOfWeek == day);
-            return schedule;
+            //var schedule = await _context.Schedules.FirstOrDefaultAsync(s=> s.DoctorId == doctorId && s.DayOfWeek == day);
+            //return schedule;
+            throw new NotImplementedException();
+
         }
     }
 }

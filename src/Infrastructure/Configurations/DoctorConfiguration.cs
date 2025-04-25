@@ -15,6 +15,11 @@ namespace Infrastructure.Configurations
                    .HasForeignKey(d => d.SpecialtyId)
                    .IsRequired();
 
+            builder.HasOne(d => d.Schedule)
+                   .WithOne(s => s.Doctor)
+                   .HasForeignKey<Schedule>(s => s.DoctorId)
+                   .IsRequired()  
+                   .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }
