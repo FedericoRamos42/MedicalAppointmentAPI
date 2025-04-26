@@ -11,9 +11,6 @@ namespace Application.Models.Request
     public class ScheduleCreateRequest
     {
         public int DoctorId { get; set; }  
-        public SheduleDay DayOfWeek { get; set; }
-        public TimeSpan StartTime { get; set; }
-        public TimeSpan EndTime { get; set; }
-
+        public List<AvailabilityCreateRequest> Availabilities { get; set; } = new List<AvailabilityCreateRequest>();
     }
 }

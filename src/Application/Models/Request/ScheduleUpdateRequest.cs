@@ -9,10 +9,6 @@ namespace Application.Models.Request
 {
     public class ScheduleUpdateRequest
     {
-        public SheduleDay DayOfWeek { get; set; }
-        public int DoctorId { get; set; }
-        public TimeSpan StartTime { get; set; }
-        public TimeSpan EndTime { get; set; }
-        
+       
     }
 }

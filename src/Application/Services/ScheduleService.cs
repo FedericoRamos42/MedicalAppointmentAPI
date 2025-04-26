@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Application.Interfaces;
 using Application.Mappers;
 using Application.Models;
@@ -13,63 +14,66 @@ namespace Application.Services
     public class ScheduleService : IScheduleService
     {
         private readonly IScheduleRepository _schedules;
-        public ScheduleService(IScheduleRepository schedule)
+        private readonly IAvailabilityRepository _availabilities;
+        private readonly IAppointmentRepository _appointments;
+        public ScheduleService(IScheduleRepository schedule,IAvailabilityRepository availabilities,IAppointmentRepository appointments)
         {
             _schedules = schedule;
+            _availabilities = availabilities;
+            _appointments = appointments;
         }
+
         public async Task<Result<ScheduleDto>> Create(ScheduleCreateRequest request)
         {
-            //Schedule schedule = new Schedule()
-            //{
-            //    DoctorId = request.DoctorId,
-            //    DayOfWeek = request.DayOfWeek,
-            //    StartTime = request.StartTime,
-            //    EndTime = request.EndTime,
-            //};
+            Schedule shedule = new Schedule()
+            {
+                DoctorId = request.DoctorId,
+                Availabilities = request.Availabilities.Select(a=> new Availability()
+                {
+                    ScheduleId = a.ScheduleId,
+                    ScheduleDay = a.ScheduleDay,
+                    StartTime = a.StartTime,
+                    EndTime = a.EndTime,
+                })
+            };
 
-            //await _schedules.AddAsync(schedule);
-
-            //var dto = schedule.ToDto();
-            //return Result<ScheduleDto>.Success(dto);
-            throw new NotImplementedException();
-
-
-
+            await _schedules.AddAsync(shedule);
+            var dto = shedule.ToDto();
+            return Result<ScheduleDto>.Success(dto);
         }
 
         public async Task<Result<ScheduleDto>> Delete(int Id)
         {
-            //var schedule = await _schedules.GetByIdAsync(Id);
-            //await _schedules.DeleteAsync(schedule);
-            //var dto = schedule.ToDto();
-            //return Result<ScheduleDto>.Success(dto);
-            throw new NotImplementedException();
-
+            var schedule = await _schedules.GetByIdAsync(Id);
+            var dto = schedule.ToDto();
+            return Result<ScheduleDto>.Success(dto);
         }
 
-        public async Task<Result<IEnumerable<ScheduleDto>>> GetByDoctor(int id)
+        public async Task<Result<IEnumerable<TimeSpan>>> GetByDoctorAndDate(int doctorId, DateTime date)
         {
-            //var schedules = await _schedules.Search(s=>s.DoctorId == id);
+            List<Availability> availabilities = (List<Availability>) await _availabilities.GetByDoctorAndDate(doctorId, date);
+            List<Appointment> appointments = (List<Appointment>) await  _appointments.GetAppointmentsbyDateAndDoctor(date, doctorId);
 
-            //var dto = schedules.ToListDto();
-            //return Result<IEnumerable <ScheduleDto>>.Success(dto);
-            throw new NotImplementedException();
+            var list = new List<TimeSpan>();
 
-        }
+            foreach (var avail in availabilities) 
+            {
+                var timeStart = avail.StartTime;
 
-        public async Task<Result<ScheduleDto>> Update(ScheduleUpdateRequest request)
-        {
-            //Schedule schedule = await _schedules.GetByDoctorAndDate(request.DoctorId,request.DayOfWeek);
+                while (timeStart + TimeSpan.FromHours(1) <= avail.EndTime)
+                {
+                    bool isOccupied = appointments.Any(a => a.Date.TimeOfDay == timeStart);
 
-            //schedule.StartTime = request.StartTime;
-            //schedule.EndTime = request.EndTime;
+                    if (!isOccupied)
+                    {
+                        list.Add(timeStart);
+                    }
 
-            //await _schedules.UpdateAsync(schedule);
+                    timeStart += TimeSpan.FromHours(1);
 
-            //var dto = schedule.ToDto();
-            //return Result<ScheduleDto>.Success(dto);
-            throw new NotImplementedException();
-
+                }
+            }
+            return Result<IEnumerable<TimeSpan>>.Success(list);
         }
     }
 }

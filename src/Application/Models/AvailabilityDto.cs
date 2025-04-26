@@ -8,10 +8,12 @@ using Domain.Enums;
 
 namespace Application.Models
 {
-    public class ScheduleDto
+    public class AvailabilityDto
     {
         public int Id { get; set; }
-        public int DoctorId { get; set; }
-        public List<AvailabilityDto> Availabilities { get; set; } = new List<AvailabilityDto>();
+        public int ScheduleId { get; set; }
+        public SheduleDay ScheduleDay { get; set; }
+        public TimeSpan StartTime { get; set; }
+        public TimeSpan EndTime { get; set; }
     }
 }

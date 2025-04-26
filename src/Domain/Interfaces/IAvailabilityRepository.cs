@@ -4,12 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Domain.Entities;
-using Domain.Enums;
 
 namespace Domain.Interfaces
 {
-    public interface IScheduleRepository : IBaseRepository<Schedule>
+    public interface IAvailabilityRepository : IBaseRepository<Availability>
     {
-       
+        Task<IEnumerable<Availability>> GetByDoctorAndDate(int doctorId, DateTime date);
     }
 }
