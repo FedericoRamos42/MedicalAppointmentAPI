@@ -13,8 +13,8 @@ namespace Application.Interfaces
     public interface IAppointmentService
     {
         Task<Result<AppointmentDto>> Create (AppointmentCreateRequest request);
+        Task<Result<AppointmentDto>> GetById(int id);
         Task<Result<IEnumerable<AppointmentDto>>> GetAll();
-        Task<Result<AppointmentDto>> GetAppointmentAvailableByDoctor(int id, DateTime? date);
         Task<Result<AppointmentDto>> Delete(int id);
     }
 }

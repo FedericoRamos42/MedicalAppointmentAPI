@@ -1,8 +1,10 @@
 ﻿using Application.Interfaces;
+using Application.Mappers;
 using Application.Models;
 using Application.Models.Request;
 using Application.Result;
 using Domain.Entities;
+using Domain.Enums;
 using Domain.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -27,25 +29,42 @@ namespace Application.Services
             
         }
 
-        public Task<Result<AppointmentDto>> Create(AppointmentCreateRequest request)
+        public async Task<Result<AppointmentDto>> Create(AppointmentCreateRequest request)
         {
-            throw new NotImplementedException();
+            Appointment appointment = new Appointment()
+            {
+                PatientId = request.PatientId,
+                DoctorId = request.DoctorId,
+                Time = request.Time,
+                Date = request.Date,    
+                Status = AppointmentStatus.Pending,
+            };
+            await _appointmentRepository.AddAsync(appointment);
+            var dto = appointment.ToDto();
+            return Result<AppointmentDto>.Success(dto);
 
         }
 
-        public Task<Result<AppointmentDto>> Delete(int id)
+        public async Task<Result<AppointmentDto>> Delete(int id)
         {
-            throw new NotImplementedException();
+            Appointment appointment = await _appointmentRepository.GetByIdAsync(id);
+            await _appointmentRepository.DeleteAsync(appointment);
+            var dto = appointment.ToDto();
+            return Result<AppointmentDto>.Success(dto); 
+        }
+        public async Task<Result<AppointmentDto>> GetById(int id)
+        {
+            Appointment appointment = await _appointmentRepository.GetByIdAsync(id);
+            var dto = appointment.ToDto();
+            return Result<AppointmentDto>.Success(dto); 
         }
 
-        public Task<Result<IEnumerable<AppointmentDto>>> GetAll()
+        public async Task<Result<IEnumerable<AppointmentDto>>> GetAll()
         {
-            throw new NotImplementedException();
+            IEnumerable<Appointment> appointments = await _appointmentRepository.GetAllAsync();
+            var dtos = appointments.ToListDto();
+            return Result<IEnumerable<AppointmentDto>>.Success(dtos);            
         }
 
-        public Task<Result<AppointmentDto>> GetAppointmentAvailableByDoctor(int id, DateTime? date)
-        {
-            throw new NotImplementedException();
-        }
     }
 }
