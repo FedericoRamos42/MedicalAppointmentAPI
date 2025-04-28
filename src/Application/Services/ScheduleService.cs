@@ -73,13 +73,16 @@ namespace Application.Services
 
             var list = new List<TimeSpan>();
 
-            foreach (var avail in availabilities) 
+            foreach (var avail in availabilities)
             {
                 var timeStart = avail.StartTime;
 
                 while (timeStart + TimeSpan.FromHours(1) <= avail.EndTime)
                 {
-                    bool isOccupied = appointments.Any(a => a.Date.TimeOfDay == timeStart);
+                    bool isOccupied = appointments.Any(a =>
+                            a.Date == date.Date &&
+                            a.Time == timeStart);
+
 
                     if (!isOccupied)
                     {
@@ -87,7 +90,6 @@ namespace Application.Services
                     }
 
                     timeStart += TimeSpan.FromHours(1);
-
                 }
             }
             return Result<IEnumerable<TimeSpan>>.Success(list);

@@ -19,8 +19,9 @@ namespace Infrastructure.Data
 
         public async Task<List<Appointment>> GetAppointmentsbyDateAndDoctor(DateTime date, int DoctorId)
         {
-            var appointments = await _context.Appointments.Where(a=>a.Date == date && DoctorId == a.DoctorId)
-                                                           .ToListAsync();
+            var appointments = await _context.Appointments
+                                                .Where(a => a.Date.Date == date.Date && a.DoctorId == DoctorId)
+                                                .ToListAsync();
             return appointments;
         }
     }
