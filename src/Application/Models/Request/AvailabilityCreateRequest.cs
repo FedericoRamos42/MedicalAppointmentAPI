@@ -9,7 +9,6 @@ namespace Application.Models.Request
 {
     public class AvailabilityCreateRequest
     {
-        public int ScheduleId { get; set; }
         public SheduleDay ScheduleDay { get; set; }
         public TimeSpan StartTime { get; set; }
         public TimeSpan EndTime { get; set; }

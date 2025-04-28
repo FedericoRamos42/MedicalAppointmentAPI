@@ -10,6 +10,6 @@ namespace Domain.Interfaces
 {
     public interface IScheduleRepository : IBaseRepository<Schedule>
     {
-       
+        Task<Schedule?> GetWithAvailabilities(int id);
     }
 }

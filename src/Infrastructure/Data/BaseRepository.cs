@@ -20,6 +20,7 @@ namespace Infrastructure.Data
         {
             await _dbContext.Set<T>().AddAsync(entity);
             await _dbContext.SaveChangesAsync();
+           
         }
 
         public async Task DeleteAsync(T entity)

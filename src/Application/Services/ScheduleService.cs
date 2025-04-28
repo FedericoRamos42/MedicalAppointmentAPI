@@ -23,6 +23,24 @@ namespace Application.Services
             _appointments = appointments;
         }
 
+        public async Task<Result<ScheduleDto>> AddAvailability(int id, AvailabilityCreateRequest request)
+        {
+            Schedule schedule = await _schedules.GetWithAvailabilities(id) ?? throw new ArgumentException("fail"); 
+            Availability availability = new Availability()
+            {
+                ScheduleId = id,
+                ScheduleDay = request.ScheduleDay,
+                StartTime = request.StartTime,
+                EndTime = request.EndTime,
+            };
+            await _availabilities.AddAsync(availability);
+            var dto = schedule.ToDto();
+            return Result<ScheduleDto>.Success(dto); 
+
+
+
+        }
+
         public async Task<Result<ScheduleDto>> Create(ScheduleCreateRequest request)
         {
             Schedule shedule = new Schedule()
@@ -30,11 +48,10 @@ namespace Application.Services
                 DoctorId = request.DoctorId,
                 Availabilities = request.Availabilities.Select(a=> new Availability()
                 {
-                    ScheduleId = a.ScheduleId,
                     ScheduleDay = a.ScheduleDay,
                     StartTime = a.StartTime,
                     EndTime = a.EndTime,
-                })
+                }).ToList(),
             };
 
             await _schedules.AddAsync(shedule);
@@ -52,7 +69,7 @@ namespace Application.Services
         public async Task<Result<IEnumerable<TimeSpan>>> GetByDoctorAndDate(int doctorId, DateTime date)
         {
             List<Availability> availabilities = (List<Availability>) await _availabilities.GetByDoctorAndDate(doctorId, date);
-            List<Appointment> appointments = (List<Appointment>) await  _appointments.GetAppointmentsbyDateAndDoctor(date, doctorId);
+            List<Appointment> appointments =  await  _appointments.GetAppointmentsbyDateAndDoctor(date, doctorId);
 
             var list = new List<TimeSpan>();
 

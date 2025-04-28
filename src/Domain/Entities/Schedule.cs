@@ -7,7 +7,7 @@ namespace Domain.Entities
     {
         public int DoctorId { get; set; }
         public Doctor Doctor { get; set; } = default!;
-        public IEnumerable<Availability> Availabilities { get; set; } = new List<Availability>();
+        public List<Availability> Availabilities { get; set; } = new List<Availability>();
     }
 
 }

@@ -21,8 +21,6 @@ namespace Web.Controllers
             return Ok(schedule);    
         }
 
-        
-
         [HttpDelete("{id}")]
         public async Task<IActionResult>Delete(int id)
         {
@@ -30,6 +28,18 @@ namespace Web.Controllers
             return Ok(shedule);
         }
 
+        [HttpGet("{doctorId}")]
+        public async Task<IActionResult> Get([FromRoute] int doctorId, [FromQuery] DateTime date)
+        {
+            var list = await _service.GetByDoctorAndDate(doctorId, date);
+            return Ok(list);
+        }
+        [HttpPost("{idSchedule}/availability")]
+        public async Task<IActionResult> AddAvailability([FromRoute]int idSchedule,[FromBody] AvailabilityCreateRequest request )
+        {
+            var schedule = await _service.AddAvailability(idSchedule, request);
+            return Ok(schedule);
+        }
 
     }
 }

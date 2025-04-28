@@ -8,6 +8,7 @@ namespace Application.Models
 {
     public class DoctorDto
     {
+        public int Id { get; set; }
         public string Name { get; set; } = default!;
         public string LastName { get; set; } = default!;
         public string PhoneNumber { get; set; } = default!;

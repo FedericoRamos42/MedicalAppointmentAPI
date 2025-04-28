@@ -17,12 +17,11 @@ namespace Infrastructure.Data
           _context = context;   
         }
 
-        public async Task<IEnumerable<Appointment>> GetAppointmentsbyDateAndDoctor(DateTime date, int DoctorId)
+        public async Task<List<Appointment>> GetAppointmentsbyDateAndDoctor(DateTime date, int DoctorId)
         {
             var appointments = await _context.Appointments.Where(a=>a.Date == date && DoctorId == a.DoctorId)
-                                                    .Select(a=>a.Time)
-                                                    .ToListAsync();
-            return (IEnumerable<Appointment>)appointments;
+                                                           .ToListAsync();
+            return appointments;
         }
     }
 }
