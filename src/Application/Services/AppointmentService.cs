@@ -26,7 +26,7 @@ namespace Application.Services
             _appointmentRepository = appointmentRepository;
             _doctorRepository = doctorRepository;
             _patientRepository = patientRepository;
-            
+
         }
 
         public async Task<Result<AppointmentDto>> Create(AppointmentCreateRequest request)
@@ -36,7 +36,7 @@ namespace Application.Services
                 PatientId = request.PatientId,
                 DoctorId = request.DoctorId,
                 Time = request.Time,
-                Date = request.Date,    
+                Date = request.Date,
                 Status = AppointmentStatus.Pending,
             };
             await _appointmentRepository.AddAsync(appointment);
@@ -50,21 +50,48 @@ namespace Application.Services
             Appointment appointment = await _appointmentRepository.GetByIdAsync(id);
             await _appointmentRepository.DeleteAsync(appointment);
             var dto = appointment.ToDto();
-            return Result<AppointmentDto>.Success(dto); 
+            return Result<AppointmentDto>.Success(dto);
         }
         public async Task<Result<AppointmentDto>> GetById(int id)
         {
             Appointment appointment = await _appointmentRepository.GetByIdAsync(id);
             var dto = appointment.ToDto();
-            return Result<AppointmentDto>.Success(dto); 
+            return Result<AppointmentDto>.Success(dto);
         }
 
         public async Task<Result<IEnumerable<AppointmentDto>>> GetAll()
         {
             IEnumerable<Appointment> appointments = await _appointmentRepository.GetAllAsync();
             var dtos = appointments.ToListDto();
-            return Result<IEnumerable<AppointmentDto>>.Success(dtos);            
+            return Result<IEnumerable<AppointmentDto>>.Success(dtos);
         }
 
+        public async Task<Result<IEnumerable<AppointmentDto>>> GetByPatient(int patientId)
+        {
+            List<Appointment> appointments = (List<Appointment>) await _appointmentRepository.Search(u => u.PatientId == patientId);
+            var dtos = appointments.ToListDto();
+            return Result<IEnumerable<AppointmentDto>>.Success(dtos);
+        }
+
+        public async Task<Result<IEnumerable<AppointmentDto>>> GetByDoctor(int doctorId)
+        {
+            List<Appointment> appointments = (List<Appointment>)await _appointmentRepository.Search(u => u.DoctorId == doctorId);
+            var dtos = appointments.ToListDto();
+            return Result<IEnumerable<AppointmentDto>>.Success(dtos);
+        }
+
+        public async Task<Result<IEnumerable<AppointmentDto>>> GetByStatus(int id, AppointmentStatus status)
+        {
+            List<Appointment> appointments = (List<Appointment>)await _appointmentRepository.Search(
+                                                                      u => u.PatientId == id || u.DoctorId == id
+                                                                      && u.Status == status);
+            var dtos = appointments.ToListDto();
+            return Result<IEnumerable<AppointmentDto>>.Success(dtos);
+        }
+
+        public Task<Result<AppointmentDto>> Cancel(int appointmentId)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

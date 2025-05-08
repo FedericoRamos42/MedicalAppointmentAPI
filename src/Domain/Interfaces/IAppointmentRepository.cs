@@ -10,6 +10,5 @@ namespace Domain.Interfaces
     public interface IAppointmentRepository : IBaseRepository<Appointment>
     {
         Task<List<Appointment>> GetAppointmentsbyDateAndDoctor(DateTime date, int DoctorId);
-        
-    }
+     }
 }

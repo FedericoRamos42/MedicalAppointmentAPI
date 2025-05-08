@@ -24,5 +24,7 @@ namespace Infrastructure.Data
                                                 .ToListAsync();
             return appointments;
         }
+       
+       
     }
 }

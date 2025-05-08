@@ -1,5 +1,7 @@
 ﻿using Application.Interfaces;
 using Application.Models.Request;
+using Domain.Entities;
+using Domain.Enums;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -24,6 +26,24 @@ namespace Web.Controllers
         public async Task<IActionResult> GetAll()
         {
             var appointments = await _appointmentService.GetAll();
+            return Ok(appointments);
+        }
+        [HttpGet("patient/{patientId}")]
+        public async Task<IActionResult> GetByPatient(int patientId)
+        {
+            var appointments = await _appointmentService.GetByPatient(patientId);
+            return Ok(appointments);
+        }
+        [HttpGet("doctor/{doctorId}")]
+        public async Task<IActionResult> GetByDoctor(int doctorId)
+        {
+            var appointments = await _appointmentService.GetByDoctor(doctorId);
+            return Ok(appointments);
+        }
+        [HttpGet("/status/{id}")]
+        public async Task<IActionResult> GetByStatus(int id,[FromQuery] AppointmentStatus status)
+        {
+            var appointments = await _appointmentService.GetByStatus(id, status);
             return Ok(appointments);
         }
         [HttpPost]
