@@ -28,16 +28,23 @@ namespace Web.Controllers
             return Ok(shedule);
         }
 
-        [HttpGet("{doctorId}")]
+        [HttpGet("/availabilities{doctorId}")]
         public async Task<IActionResult> Get([FromRoute] int doctorId, [FromQuery] DateTime date)
         {
             var list = await _service.GetByDoctorAndDate(doctorId, date);
             return Ok(list);
         }
-        [HttpPost("{idSchedule}/availability")]
-        public async Task<IActionResult> AddAvailability([FromRoute]int idSchedule,[FromBody] AvailabilityCreateRequest request )
+        [HttpGet("{doctorId}")]
+        public async Task<IActionResult> GetSchedule([FromRoute] int doctorId)
         {
-            var schedule = await _service.AddAvailability(idSchedule, request);
+            var schedule = await _service.GetByDoctor(doctorId);
+            return Ok(schedule);
+        }
+
+        [HttpPost("{idDoctor}/availability")]
+        public async Task<IActionResult> AddAvailability([FromRoute]int idDoctor,[FromBody] AvailabilityCreateRequest request )
+        {
+            var schedule = await _service.AddAvailability(idDoctor, request);
             return Ok(schedule);
         }
 

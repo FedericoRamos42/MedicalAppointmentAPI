@@ -1,3 +1,4 @@
+using System.Text.Json.Serialization;
 using Application.Interfaces;
 using Application.Services;
 using Domain.Interfaces;
@@ -12,6 +13,13 @@ builder.Services.AddControllers();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+
+builder.Services.AddControllers()
+                .AddJsonOptions(options =>
+                {
+                    options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()); 
+                });
 
 #region services
 builder.Services.AddScoped<IAdminRepository, AdminRepository>();

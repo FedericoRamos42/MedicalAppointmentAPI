@@ -2,6 +2,7 @@
 using Domain.Enums;
 using Domain.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Identity.Client;
 
 namespace Infrastructure.Data
 {
@@ -16,9 +17,11 @@ namespace Infrastructure.Data
         public async Task<Schedule?> GetWithAvailabilities(int id)
         {
             var schedule = await _context.Schedules.Include(s => s.Availabilities)
-                                                   .FirstOrDefaultAsync(s => s.Id == id);
+                                                   .FirstOrDefaultAsync(s => s.DoctorId == id);
 
             return schedule;
         }
+        
+
     }
 }

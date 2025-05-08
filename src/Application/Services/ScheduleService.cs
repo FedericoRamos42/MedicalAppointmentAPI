@@ -28,7 +28,7 @@ namespace Application.Services
             Schedule schedule = await _schedules.GetWithAvailabilities(id) ?? throw new ArgumentException("fail"); 
             Availability availability = new Availability()
             {
-                ScheduleId = id,
+                ScheduleId = schedule.Id,
                 ScheduleDay = request.ScheduleDay,
                 StartTime = request.StartTime,
                 EndTime = request.EndTime,
@@ -66,6 +66,14 @@ namespace Application.Services
             return Result<ScheduleDto>.Success(dto);
         }
 
+        public async Task<Result<ScheduleDto>> GetByDoctor(int id)
+        {
+            Schedule entity = await _schedules.GetWithAvailabilities(id) ?? throw new Exception("error");
+            var dto = entity.ToDto();
+            return Result<ScheduleDto>.Success(dto);
+            
+        }
+
         public async Task<Result<IEnumerable<TimeSpan>>> GetByDoctorAndDate(int doctorId, DateTime date)
         {
             List<Availability> availabilities = (List<Availability>) await _availabilities.GetByDoctorAndDate(doctorId, date);
@@ -79,10 +87,7 @@ namespace Application.Services
 
                 while (timeStart + TimeSpan.FromHours(1) <= avail.EndTime)
                 {
-                    bool isOccupied = appointments.Any(a =>
-                            a.Date == date.Date &&
-                            a.Time == timeStart);
-
+                    bool isOccupied = appointments.Any(a =>a.Date == date.Date && a.Time == timeStart);
 
                     if (!isOccupied)
                     {
@@ -94,5 +99,7 @@ namespace Application.Services
             }
             return Result<IEnumerable<TimeSpan>>.Success(list);
         }
+
+        
     }
 }

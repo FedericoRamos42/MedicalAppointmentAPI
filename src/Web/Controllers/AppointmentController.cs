@@ -17,7 +17,7 @@ namespace Web.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> Get(int id)
         {
-            var appointment = _appointmentService.GetById(id);
+            var appointment = await _appointmentService.GetById(id);
             return Ok(appointment);
         }
         [HttpGet]
