@@ -89,9 +89,13 @@ namespace Application.Services
             return Result<IEnumerable<AppointmentDto>>.Success(dtos);
         }
 
-        public Task<Result<AppointmentDto>> Cancel(int appointmentId)
+        public async Task<Result<AppointmentDto>> Cancel(int appointmentId)
         {
-            throw new NotImplementedException();
+            Appointment appointment = await _appointmentRepository.GetByIdAsync(appointmentId);
+            appointment.Status = AppointmentStatus.Canceled;
+            await _appointmentRepository.UpdateAsync(appointment);
+            var dtos = appointment.ToDto();
+            return Result<AppointmentDto>.Success(dtos);  
         }
     }
 }

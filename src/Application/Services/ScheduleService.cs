@@ -87,7 +87,9 @@ namespace Application.Services
 
                 while (timeStart + TimeSpan.FromHours(1) <= avail.EndTime)
                 {
-                    bool isOccupied = appointments.Any(a =>a.Date == date.Date && a.Time == timeStart);
+                    bool isOccupied = appointments.Any(a =>a.Date == date.Date
+                                                       && a.Time == timeStart
+                                                       && a.Status == AppointmentStatus.Pending);
 
                     if (!isOccupied)
                     {

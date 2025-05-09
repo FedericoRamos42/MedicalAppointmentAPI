@@ -58,6 +58,12 @@ namespace Web.Controllers
             var appointment = await _appointmentService.Delete(id);
             return Ok(appointment);
         }
+        [HttpPut("/{id}")]
+        public async Task<IActionResult> Cancel (int id)
+        {
+            var appointment = await _appointmentService.Cancel(id);
+            return Ok(appointment);
+        }
 
     }
 }
