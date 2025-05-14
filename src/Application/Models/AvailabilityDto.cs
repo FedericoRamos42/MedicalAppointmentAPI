@@ -11,8 +11,8 @@ namespace Application.Models
     public class AvailabilityDto
     {
         public int Id { get; set; }
-        public int ScheduleId { get; set; }
-        public SheduleDay ScheduleDay { get; set; }
+        public int DoctorId { get; set; }
+        public SheduleDay DayOfWeek { get; set; }
         public TimeSpan StartTime { get; set; }
         public TimeSpan EndTime { get; set; }
     }

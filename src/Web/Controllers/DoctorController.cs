@@ -19,7 +19,12 @@ namespace Web.Controllers
             var doctor = await _doctorService.GetById(id);
             return Ok(doctor);
         }
-
+        [HttpGet("withAvailabilities/{id}")]
+        public async Task<IActionResult> GetWithAvailabilities(int id)
+        {
+            var doctor = await _doctorService.GetWithAvailabilities(id);
+            return Ok(doctor);
+        }
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {

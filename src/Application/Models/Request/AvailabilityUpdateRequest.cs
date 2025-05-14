@@ -7,8 +7,9 @@ using Domain.Enums;
 
 namespace Application.Models.Request
 {
-    public class ScheduleUpdateRequest
+    public class AvailabilityUpdateRequest
     {
-       
+        public TimeSpan StartTime { get; set; }
+        public TimeSpan EndTime { get; set; }
     }
 }

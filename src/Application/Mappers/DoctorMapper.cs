@@ -20,6 +20,7 @@ namespace Application.Mappers
             PhoneNumber = doctor.PhoneNumber,
             SpecialtyId = doctor.SpecialtyId,
             IsAvailable = doctor.IsAvailable
+            
         };
         public static List<DoctorDto> ToListDto(this IEnumerable<Doctor> doctors) => doctors.Select(x => ToDto(x)).ToList();
     }

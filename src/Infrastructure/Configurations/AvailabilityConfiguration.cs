@@ -20,7 +20,7 @@ namespace Infrastructure.Configurations
             builder.ToTable("Availability");
             builder.HasKey(x => x.Id);
 
-            builder.Property(s => s.ScheduleDay)
+            builder.Property(s => s.DayOfWeek)
                  .HasConversion(new EnumToStringConverter<SheduleDay>())
                  .IsRequired();
 

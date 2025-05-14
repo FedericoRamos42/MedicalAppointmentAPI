@@ -65,5 +65,13 @@ namespace Web.Controllers
             return Ok(appointment);
         }
 
+        [HttpGet("/availabilities{doctorId}")]
+        public async Task<IActionResult> Get([FromRoute] int doctorId, [FromQuery] DateTime date)
+        {
+            var list = await _appointmentService.GetAppointmentAvailabilited(doctorId, date);
+            return Ok(list);
+        }
+
+
     }
 }

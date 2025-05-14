@@ -2,6 +2,7 @@
 using Application.Mappers;
 using Application.Models;
 using Application.Models.Request;
+using Application.Models.Response;
 using Application.Result;
 using Domain.Entities;
 using Domain.Interfaces;
@@ -43,7 +44,7 @@ namespace Application.Services
         }
 
         public async Task<Result<IEnumerable<DoctorDto>>> GetAll()
-        {
+        { 
             IEnumerable<Doctor> list = await _repository.GetAllAsync();
             var dto = list.ToListDto();
             return Result<IEnumerable<DoctorDto>>.Success(dto);
@@ -54,6 +55,25 @@ namespace Application.Services
             Doctor doctor = await _repository.GetByIdAsync(id);
             var dto = doctor.ToDto();
             return Result<DoctorDto>.Success(dto);
+        }
+
+        public async Task<Result<DoctorResponse>> GetWithAvailabilities(int id)
+        {
+            var doctor = await  _repository.GetWithAvailabities(id);
+            var dto = new DoctorResponse()
+            {
+                Id = id,
+                Name = doctor.Name,
+                LastName = doctor.LastName,
+                PhoneNumber = doctor.PhoneNumber,
+                Email = doctor.Email,
+                Address = doctor.Address,
+                SpecialtyId = doctor.SpecialtyId,
+                IsAvailable = doctor.IsAvailable,
+                Availabilities = doctor.Availabilities.ToListDto()
+            };
+
+            return Result<DoctorResponse>.Success(dto);
         }
 
         public async Task<Result<DoctorDto>> Update(int id, DoctorUpdateRequest request)
@@ -71,5 +91,7 @@ namespace Application.Services
             var dto = doctor.ToDto();
             return Result<DoctorDto>.Success(dto);
         }
+
+       
     }
 }

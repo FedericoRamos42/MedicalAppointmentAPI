@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Domain.Entities;
 
-namespace Application.Models
+namespace Application.Models.Response
 {
-    public class DoctorDto
+    public class DoctorResponse
     {
         public int Id { get; set; }
         public string Name { get; set; } = default!;
@@ -16,6 +17,6 @@ namespace Application.Models
         public string Email { get; set; } = default!;
         public int SpecialtyId { get; set; }
         public bool IsAvailable { get; set; } = true;
-
+        public List<AvailabilityDto> Availabilities { get; set; } = [];
     }
 }

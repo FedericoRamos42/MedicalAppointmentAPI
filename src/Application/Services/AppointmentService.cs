@@ -16,17 +16,19 @@ namespace Application.Services
 {
     public class AppointmentService : IAppointmentService
     {
+        private readonly IAvailabilityRepository _availabilityRepository;
         private readonly IAppointmentRepository _appointmentRepository;
         private readonly IDoctorRepository _doctorRepository;
         private readonly IPatientRepository _patientRepository;
         public AppointmentService(IAppointmentRepository appointmentRepository,
                                   IDoctorRepository doctorRepository,
-                                  IPatientRepository patientRepository)
+                                  IPatientRepository patientRepository,
+                                  IAvailabilityRepository availabilityRepository)
         {
             _appointmentRepository = appointmentRepository;
             _doctorRepository = doctorRepository;
             _patientRepository = patientRepository;
-
+            _availabilityRepository = availabilityRepository;
         }
 
         public async Task<Result<AppointmentDto>> Create(AppointmentCreateRequest request)
@@ -96,6 +98,34 @@ namespace Application.Services
             await _appointmentRepository.UpdateAsync(appointment);
             var dtos = appointment.ToDto();
             return Result<AppointmentDto>.Success(dtos);  
+        }
+
+        public async Task<Result<IEnumerable<TimeSpan>>> GetAppointmentAvailabilited(int doctorId, DateTime date)
+        {
+            List<Availability> availabilities = (List<Availability>) await _availabilityRepository.GetByDoctorAndDate(doctorId, date);
+            List<Appointment> appointments = await _appointmentRepository.GetAppointmentsbyDateAndDoctor(date, doctorId);
+
+            var list = new List<TimeSpan>();
+
+            foreach (var avail in availabilities)
+            {
+                var timeStart = avail.StartTime;
+
+                while (timeStart + TimeSpan.FromHours(1) <= avail.EndTime)
+                {
+                    bool isOccupied = appointments.Any(a => a.Date == date.Date
+                                                       && a.Time == timeStart
+                                                       && a.Status == AppointmentStatus.Pending);
+
+                    if (!isOccupied)
+                    {
+                        list.Add(timeStart);
+                    }
+
+                    timeStart += TimeSpan.FromHours(1);
+                }
+            }
+            return Result<IEnumerable<TimeSpan>>.Success(list);
         }
     }
 }

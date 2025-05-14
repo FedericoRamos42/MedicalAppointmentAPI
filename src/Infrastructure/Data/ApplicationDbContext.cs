@@ -15,7 +15,6 @@ namespace Infrastructure.Data
         public DbSet<Appointment> Appointments { get; set; }
         public DbSet<MedicalHistory> MedicalHistories { get; set; }
         public DbSet<Specialty> Specialties { get; set; }
-        public DbSet<Schedule> Schedules { get; set; }
         public DbSet<Availability> Availabilities { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -27,7 +26,6 @@ namespace Infrastructure.Data
             modelBuilder.ApplyConfiguration(new AppointmentConfiguration());
             modelBuilder.ApplyConfiguration(new AdminConfiguration());
             modelBuilder.ApplyConfiguration(new SpecialtyConfiguration());
-            modelBuilder.ApplyConfiguration(new ScheduleConfiguration());
             modelBuilder.ApplyConfiguration(new AvailabilityConfiguration());
 
 

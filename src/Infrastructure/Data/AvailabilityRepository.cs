@@ -22,7 +22,7 @@ namespace Infrastructure.Data
         {
 
             SheduleDay day = (SheduleDay)((int)date.DayOfWeek);
-            var list = await _context.Availabilities.Where(a => a.Schedule.DoctorId == doctorId && a.ScheduleDay == day).ToListAsync();
+            var list = await _context.Availabilities.Where(a => a.DoctorId == doctorId && a.DayOfWeek == day).ToListAsync();
             return list;
         }
     }

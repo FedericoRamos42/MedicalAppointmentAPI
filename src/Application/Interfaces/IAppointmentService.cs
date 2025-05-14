@@ -20,6 +20,7 @@ namespace Application.Interfaces
         Task<Result<IEnumerable<AppointmentDto>>> GetByDoctor(int doctorId);
         Task<Result<IEnumerable<AppointmentDto>>> GetByPatient(int patientId);
         Task<Result<IEnumerable<AppointmentDto>>> GetByStatus(int id, AppointmentStatus status);
+        Task<Result<IEnumerable<TimeSpan>>> GetAppointmentAvailabilited(int doctorId, DateTime date);
         Task<Result<AppointmentDto>> Cancel(int appointmentId);
 
     }

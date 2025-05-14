@@ -13,8 +13,8 @@ namespace Application.Mappers
         public static AvailabilityDto ToDto(this Availability availability) => new AvailabilityDto
         {
             Id = availability.Id,
-            ScheduleDay = availability.ScheduleDay,
-            ScheduleId = availability.ScheduleId,
+            DayOfWeek = availability.DayOfWeek,
+            DoctorId = availability.DoctorId,
             EndTime = availability.EndTime,
             StartTime = availability.StartTime,
         };
