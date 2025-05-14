@@ -35,11 +35,11 @@ namespace Application.Services
 
         public async Task<Result<AdminDto>> Delete(int id)
         {
-            Admin admin = await _repository.GetByIdAsync(id);
-            await _repository.DeleteAsync(admin);
+            var admin = await _repository.GetByIdAsync(id);
+            admin.IsAvailable = false;
+            await _repository.UpdateAsync(admin);
             var dto = admin.ToDto();
             return Result<AdminDto>.Success(dto);
-
         }
 
         public async Task<Result<IEnumerable<AdminDto>>> GetAll()

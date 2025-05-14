@@ -18,6 +18,7 @@ namespace Application.Mappers
             Email = admin.Email,
             Address = admin.Address,
             PhoneNumber = admin.PhoneNumber,
+            isAvailable = admin.IsAvailable,
         };
 
         public static List<AdminDto> ToListDto(this IEnumerable<Admin> admins) => admins.Select(x => ToDto(x)).ToList();

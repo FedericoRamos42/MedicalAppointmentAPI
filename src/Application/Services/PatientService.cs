@@ -23,6 +23,7 @@ namespace Application.Services
         {
             _repository = repository;
         }
+
         public async Task<Result<PatientDto>> Create(PatientCreateRequest request)
         {
             Patient patient = new Patient()
@@ -42,8 +43,9 @@ namespace Application.Services
         }
         public async Task<Result<PatientDto>> Delete(int id)
         {
-            Patient patient = await _repository.GetByIdAsync(id);
-            await _repository.DeleteAsync(patient);
+            var patient = await _repository.GetByIdAsync(id);
+            patient.IsAvailable = false;
+            await _repository.UpdateAsync(patient);
             var dto = patient.ToDto();
             return Result<PatientDto>.Success(dto);
         }

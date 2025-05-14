@@ -37,8 +37,9 @@ namespace Application.Services
 
         public async Task<Result<DoctorDto>> Delete(int id)
         {
-            Doctor doctor = await _repository.GetByIdAsync(id);
-            await _repository.DeleteAsync(doctor);
+            var doctor = await _repository.GetByIdAsync(id);
+            doctor.IsAvailable = false;
+            await _repository.UpdateAsync(doctor);
             var dto = doctor.ToDto();
             return Result<DoctorDto>.Success(dto);
         }

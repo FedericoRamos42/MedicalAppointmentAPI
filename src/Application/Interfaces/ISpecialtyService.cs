@@ -15,5 +15,6 @@ namespace Application.Interfaces
         Task<Result<IEnumerable<SpecialtyDto>>> GetAll();
         Task<Result<SpecialtyDto>> Create(SpecialtyCreateRequest request);
         Task<Result<SpecialtyDto>> Delete(int id);
+        Task<Result<SpecialtyDto>> Update(int id, SpecialtyUpdateRequest request);
     }
 }

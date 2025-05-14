@@ -38,6 +38,12 @@ namespace Web.Controllers
             var result = await _service.Delete(id);
             return Ok(result);
         }
+        [HttpPut("{id}")]
 
+        public async Task<IActionResult> Update(int id, [FromBody] SpecialtyUpdateRequest request)
+        {
+            var result = await _service.Update(id,request);
+            return Ok(result);
+        }
     }
 }

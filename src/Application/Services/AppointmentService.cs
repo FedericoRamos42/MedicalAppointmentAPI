@@ -127,5 +127,7 @@ namespace Application.Services
             }
             return Result<IEnumerable<TimeSpan>>.Success(list);
         }
+
+
     }
 }

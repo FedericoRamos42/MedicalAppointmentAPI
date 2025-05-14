@@ -15,7 +15,7 @@ namespace Application.Models
         public string Address { get; set; } = default!;
         public string Email { get; set; } = default!;
         public string HealtInsurance { get; set; } = default!;
-        public bool IsAvailable { get; set; } = true;
+        public bool IsAvailable { get; set; }
 
     }
 }
