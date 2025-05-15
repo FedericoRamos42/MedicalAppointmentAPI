@@ -4,21 +4,33 @@ using Application.Models;
 using Application.Models.Request;
 using Application.Models.Response;
 using Application.Result;
+using Application.Validations.Doctor;
 using Domain.Entities;
 using Domain.Interfaces;
+using FluentValidation;
 
 namespace Application.Services
 {
     public class DoctorService : IDoctorService
     {
         private readonly IDoctorRepository _repository;
-        public DoctorService(IDoctorRepository repository)
+        private readonly IValidator<DoctorCreateRequest> _validatorCreate;
+        public DoctorService(IDoctorRepository repository, IValidator<DoctorCreateRequest> validator)
         {
             _repository = repository;
+            _validatorCreate = validator;
         }
 
         public async Task<Result<DoctorDto>> Create(DoctorCreateRequest request)
         {
+            var validationResult = _validatorCreate.Validate(request);
+            if (!validationResult.IsValid)
+            {
+                List<string> errorsModels = validationResult.Errors.Select(e => e.ErrorMessage).ToList();
+                return Result<DoctorDto>.FailureModels(errorsModels);
+            }
+
+            
             Doctor doctor = new Doctor()
             {
                 Name = request.Name,

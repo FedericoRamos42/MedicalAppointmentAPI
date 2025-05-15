@@ -2,7 +2,9 @@ using System.Data;
 using System.Text.Json.Serialization;
 using Application.Interfaces;
 using Application.Services;
+using Application.Validations.Doctor;
 using Domain.Interfaces;
+using FluentValidation;
 using Infrastructure.Data;
 using Infrastructure.Services;
 using Microsoft.EntityFrameworkCore;
@@ -39,6 +41,8 @@ builder.Services.AddScoped<IAvailabilityService, AvailabilityService>();
 builder.Services.AddScoped<IAuthenticationRepository, AuthenticationRepository>();
 builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
 builder.Services.AddScoped<IDashboardService, DashboardService>();
+
+builder.Services.AddValidatorsFromAssemblyContaining<CreateDoctorValidator>();
 #endregion
 
 
