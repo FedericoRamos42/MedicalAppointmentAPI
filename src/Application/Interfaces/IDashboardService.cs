@@ -11,5 +11,7 @@ namespace Application.Interfaces
     public interface IDashboardService
     {
         Task<Result<DashboardAdminDto>> GetAdminDashboard();
+        Task<Result<DashboardDoctorDto>> GetDoctorDashboard(int doctorId);
+
     }
 }

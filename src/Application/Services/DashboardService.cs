@@ -38,5 +38,22 @@ namespace Application.Services
 
             return Result<DashboardAdminDto>.Success(dto);
         }
+        public async Task<Result<DashboardDoctorDto>> GetDoctorDashboard(int doctorId)
+        {
+            
+            var totalAppointments = await _repositoryAppointment.CountAsync(a=>a.DoctorId == doctorId);
+            var todayAppointment = await _repositoryAppointment.CountAsync(a=>a.DoctorId == doctorId && a.Date.Date == DateTime.Today);
+            var confirmedAppointments = await _repositoryAppointment.CountAsync(a => a.DoctorId == doctorId && a.Status == Domain.Enums.AppointmentStatus.Pending);
+            var canceledAppointments = await _repositoryAppointment.CountAsync(a=> a.DoctorId == doctorId && a.Status == Domain.Enums.AppointmentStatus.Canceled);
+            var dto = new DashboardDoctorDto()
+            {
+                AppointmentTotal = totalAppointments,
+                AppoinmentToday = todayAppointment,
+                AppointmentCanceled = canceledAppointments,
+                AppointmentConfirmed = confirmedAppointments,
+                MedicalHistoryTotal = 1
+            };
+            return Result<DashboardDoctorDto>.Success(dto);
+        }
     }
 }

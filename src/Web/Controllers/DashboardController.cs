@@ -20,5 +20,11 @@ namespace Web.Controllers
             var dashboard = await _dashboardService.GetAdminDashboard();
             return Ok(dashboard);
         }
+        [HttpGet("Doctor/{id}")]
+        public async Task<IActionResult> GetDoctorDashboard(int id)
+        {
+            var dashboard = await _dashboardService.GetDoctorDashboard(id);
+            return Ok(dashboard);
+        }
     }
 }
