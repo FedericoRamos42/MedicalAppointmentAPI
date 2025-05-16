@@ -1,4 +1,5 @@
 using System.Data;
+using System.Text;
 using System.Text.Json.Serialization;
 using Application.Interfaces;
 using Application.Services;
@@ -8,6 +9,8 @@ using FluentValidation;
 using Infrastructure.Data;
 using Infrastructure.Services;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -24,7 +27,29 @@ builder.Services.AddControllers()
                 {
                     options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()); 
                 });
+#region SwaggerAuth
+builder.Services.AddSwaggerGen(setupAction =>
+{
+    setupAction.AddSecurityDefinition("MedicalAppointmentApi", new OpenApiSecurityScheme() 
+    {
+        Type = SecuritySchemeType.Http,
+        Scheme = "Bearer",
+        Description = "Acá pegar el token generado al loguearse."
+    });
 
+    setupAction.AddSecurityRequirement(new OpenApiSecurityRequirement
+    {
+        {
+            new OpenApiSecurityScheme
+            {
+                Reference = new OpenApiReference
+                {
+                    Type = ReferenceType.SecurityScheme,
+                    Id = "MedicalAppointmentApi" } 
+                }, new List<string>() }
+    });
+});
+#endregion
 #region services
 builder.Services.AddScoped<IAdminRepository, AdminRepository>();
 builder.Services.AddScoped<IAdminService, AdminService>();
@@ -43,6 +68,22 @@ builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
 builder.Services.AddScoped<IDashboardService, DashboardService>();
 
 builder.Services.AddValidatorsFromAssemblyContaining<CreateDoctorValidator>();
+#endregion
+#region Authentication
+builder.Services.AddAuthentication("Bearer") 
+    .AddJwtBearer(options => 
+    {
+        options.TokenValidationParameters = new()
+        {
+            ValidateIssuer = true,
+            ValidateAudience = true,
+            ValidateIssuerSigningKey = true,
+            ValidIssuer = builder.Configuration["Authentication:Issuer"],
+            ValidAudience = builder.Configuration["Authentication:Audience"],
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(builder.Configuration["Authentication:SecretForKey"])),
+        };
+    }
+);
 #endregion
 
 

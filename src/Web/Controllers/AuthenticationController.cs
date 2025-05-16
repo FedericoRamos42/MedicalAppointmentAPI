@@ -18,7 +18,7 @@ namespace Web.Controllers
         [HttpPost]
         public async Task<IActionResult> AuthenticateUser([FromBody] CredentialForRequest request)
         {
-            var token = await _authenticationService.ValidateUser(request);
+            var token = await _authenticationService.AuthenticateCredentials(request);
 
             if (token is not null)
             {
@@ -27,6 +27,7 @@ namespace Web.Controllers
 
             return Unauthorized();
         }
+
 
     }
 }
