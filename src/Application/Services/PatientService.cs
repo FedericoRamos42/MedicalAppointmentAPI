@@ -19,13 +19,18 @@ namespace Application.Services
     public class PatientService : IPatientService
     {
         private readonly IPatientRepository _repository;
-        public PatientService(IPatientRepository repository)
+        private readonly IPasswordHasherService _passwordHasherService;
+
+        public PatientService(IPatientRepository repository, IPasswordHasherService passwordHasherService)
         {
             _repository = repository;
+            _passwordHasherService = passwordHasherService;
         }
 
         public async Task<Result<PatientDto>> Create(PatientCreateRequest request)
         {
+            var hashedPassword = _passwordHasherService.HashPassword(request.Password);
+
             Patient patient = new Patient()
             {
                 Name = request.Name,
@@ -33,7 +38,7 @@ namespace Application.Services
                 PhoneNumber = request.PhoneNumber,
                 Email = request.Email,
                 Address = request.Address,
-                Password = request.Password,
+                Password = hashedPassword,
                 HealtInsurance = request.HealtInsurance,
                 IsAvailable = request.IsAvailable
             };

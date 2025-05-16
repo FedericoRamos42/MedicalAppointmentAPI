@@ -11,12 +11,15 @@ namespace Application.Services
     public class AdminService : IAdminService
     {
         private readonly IAdminRepository _repository;
-        public AdminService(IAdminRepository repository)
+        private readonly IPasswordHasherService _passwordHasherService;
+        public AdminService(IAdminRepository repository, IPasswordHasherService passwordHasherService)
         {
             _repository = repository;
+            _passwordHasherService = passwordHasherService;
         }
         public async Task<Result<AdminDto>> Create(AdminCreateRequest request)
         {
+            var hashedPassword = _passwordHasherService.HashPassword(request.Password);
             Admin admin = new Admin()
             {
                 Name = request.Name,
@@ -24,9 +27,8 @@ namespace Application.Services
                 PhoneNumber = request.PhoneNumber,
                 Email = request.Email,
                 Address = request.Address,
-                Password = request.Password,
+                Password = hashedPassword,
             };
-
             await _repository.AddAsync(admin);
             var dto = admin.ToDto();
             return Result<AdminDto>.Success(dto);
