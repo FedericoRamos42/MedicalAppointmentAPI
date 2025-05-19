@@ -16,11 +16,13 @@ namespace Application.Services
         private readonly IDoctorRepository _repository;
         private readonly IValidator<DoctorCreateRequest> _validatorCreate;
         private readonly IPasswordHasherService _passwordHasherService;
-        public DoctorService(IDoctorRepository repository, IValidator<DoctorCreateRequest> validator, IPasswordHasherService passwordHasherService)
+        private readonly ISpecialtyRepository _specialtyRepository;
+        public DoctorService(IDoctorRepository repository, IValidator<DoctorCreateRequest> validator, IPasswordHasherService passwordHasherService,ISpecialtyRepository specialtyRepository)
         {
             _repository = repository;
             _validatorCreate = validator;
             _passwordHasherService = passwordHasherService;
+            _specialtyRepository = specialtyRepository;
         }
 
         public async Task<Result<DoctorDto>> Create(DoctorCreateRequest request)
@@ -30,6 +32,11 @@ namespace Application.Services
             {
                 List<string> errorsModels = validationResult.Errors.Select(e => e.ErrorMessage).ToList();
                 return Result<DoctorDto>.FailureModels(errorsModels);
+            }
+            var specialty = await _specialtyRepository.GetByIdAsync(request.SpecialtyId);
+            if (specialty is null)
+            {
+                return Result<DoctorDto>.Failure($"Specialty with id {request.SpecialtyId} does not exist");
             }
             var hashedPassword = _passwordHasherService.HashPassword(request.Password);
 
@@ -52,6 +59,7 @@ namespace Application.Services
         public async Task<Result<DoctorDto>> Delete(int id)
         {
             var doctor = await _repository.GetByIdAsync(id);
+            //validar doctor.
             doctor.IsAvailable = false;
             await _repository.UpdateAsync(doctor);
             var dto = doctor.ToDto();
@@ -68,6 +76,7 @@ namespace Application.Services
         public async Task<Result<DoctorDto>> GetById(int id)
         {
             Doctor doctor = await _repository.GetByIdAsync(id);
+            //validar doctor
             var dto = doctor.ToDto();
             return Result<DoctorDto>.Success(dto);
         }
@@ -75,6 +84,8 @@ namespace Application.Services
         public async Task<Result<DoctorResponse>> GetWithAvailabilities(int id)
         {
             var doctor = await  _repository.GetWithAvailabities(id);
+
+            /// validar doctor
             var dto = new DoctorResponse()
             {
                 Id = id,
@@ -94,6 +105,8 @@ namespace Application.Services
         public async Task<Result<DoctorDto>> Update(int id, DoctorUpdateRequest request)
         {
             Doctor doctor = await _repository.GetByIdAsync(id);
+
+            ///validar doctor
             doctor.Name = request.Name;
             doctor.LastName = request.LastName;
             doctor.PhoneNumber = request.PhoneNumber;

@@ -21,12 +21,14 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-
+#region Swagger
 builder.Services.AddControllers()
                 .AddJsonOptions(options =>
                 {
                     options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()); 
                 });
+#endregion
+
 #region SwaggerAuth
 builder.Services.AddSwaggerGen(setupAction =>
 {
@@ -34,7 +36,6 @@ builder.Services.AddSwaggerGen(setupAction =>
     {
         Type = SecuritySchemeType.Http,
         Scheme = "Bearer",
-        Description = "Acá pegar el token generado al loguearse."
     });
 
     setupAction.AddSecurityRequirement(new OpenApiSecurityRequirement
@@ -50,7 +51,8 @@ builder.Services.AddSwaggerGen(setupAction =>
     });
 });
 #endregion
-#region services
+
+#region Services
 builder.Services.AddScoped<IAdminRepository, AdminRepository>();
 builder.Services.AddScoped<IAdminService, AdminService>();
 builder.Services.AddScoped<IDoctorService, DoctorService>();
@@ -73,6 +75,7 @@ builder.Services.AddHttpContextAccessor();
 
 builder.Services.AddValidatorsFromAssemblyContaining<CreateDoctorValidator>();
 #endregion
+
 #region Authentication
 builder.Services.AddAuthentication("Bearer") 
     .AddJwtBearer(options => 

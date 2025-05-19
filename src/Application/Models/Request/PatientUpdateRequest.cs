@@ -15,6 +15,5 @@ namespace Application.Models.Request
         public string PhoneNumber { get; set; } = string.Empty;
         public string Email { get; set; } = string.Empty;
         public HealtInsurance HealtInsurance { get; set; }
-        public bool IsAvailable { get; set; } = true;
     }
 }
