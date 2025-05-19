@@ -17,11 +17,13 @@ namespace Infrastructure.Services
     public class AuthenticationService : IAuthenticationService
     {
        private readonly IAuthenticationRepository _authenticationRepository;
-        private readonly IConfiguration _configuration;
-       public AuthenticationService(IAuthenticationRepository authenticationRepository, IConfiguration configuration)
+       private readonly IConfiguration _configuration;
+       private readonly IPasswordHasherService _passwordHasher;
+       public AuthenticationService(IAuthenticationRepository authenticationRepository, IConfiguration configuration, IPasswordHasherService passwordHasherService)
         {
             _authenticationRepository = authenticationRepository;
             _configuration = configuration;
+            _passwordHasher = passwordHasherService;
         }
 
         public async Task<string?> AuthenticateCredentials(CredentialForRequest credentialForRequest)
@@ -39,15 +41,16 @@ namespace Infrastructure.Services
 
         public async Task<User?> ValidateUser(CredentialForRequest credentialForRequest)
         {
-            User? user = await _authenticationRepository.Authenticate(credentialForRequest.Email, credentialForRequest.Password);
-            if (user == null)
+            User? user = await _authenticationRepository.GetUserByEmail(credentialForRequest.Email);
+            if (user == null || user.IsAvailable == false)
             {
                 return null;
             }
-            if (user.IsAvailable == false)
+            var passwordValidator = _passwordHasher.VerifyPassword(user.Password,credentialForRequest.Password);
+            if (!passwordValidator)
             {
                 return null;
-            }
+            }            
             return user;
         }
         public IEnumerable<Claim> GetUserClaimsAsync(User user)

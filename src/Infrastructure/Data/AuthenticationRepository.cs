@@ -18,9 +18,13 @@ namespace Infrastructure.Data
             _context = context;
         }
               
-        public async Task<User?> Authenticate(string email, string password)
+        public async Task<User?> GetUserByEmail(string email)
         {
-            User? userToAuthenticate = await _context.Set<User>().FirstOrDefaultAsync(u => u.Email == email && u.Password == password);
+            User? userToAuthenticate = await _context.Set<User>().FirstOrDefaultAsync(u => u.Email == email);
+            if (userToAuthenticate == null)
+            {
+                return null;
+            }
             return userToAuthenticate;
         }
     }

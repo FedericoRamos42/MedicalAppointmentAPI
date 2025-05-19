@@ -9,7 +9,7 @@ namespace Domain.Interfaces
 {
     public interface IAuthenticationRepository 
     {
-        Task<User?> Authenticate(string email, string password);
+        Task<User?> GetUserByEmail(string email);
 
     }
 }

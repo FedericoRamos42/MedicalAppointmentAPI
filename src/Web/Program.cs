@@ -74,6 +74,7 @@ builder.Services.AddHttpContextAccessor();
 
 
 builder.Services.AddValidatorsFromAssemblyContaining<CreateDoctorValidator>();
+
 #endregion
 
 #region Authentication

@@ -59,7 +59,10 @@ namespace Application.Services
         public async Task<Result<DoctorDto>> Delete(int id)
         {
             var doctor = await _repository.GetByIdAsync(id);
-            //validar doctor.
+            if (doctor is null)
+            {
+                return Result<DoctorDto>.Failure($"Doctor with id {id} does not exist");
+            }
             doctor.IsAvailable = false;
             await _repository.UpdateAsync(doctor);
             var dto = doctor.ToDto();
@@ -76,7 +79,10 @@ namespace Application.Services
         public async Task<Result<DoctorDto>> GetById(int id)
         {
             Doctor doctor = await _repository.GetByIdAsync(id);
-            //validar doctor
+            if (doctor is null)
+            {
+                return Result<DoctorDto>.Failure($"Doctor with id {id} does not exist");
+            }
             var dto = doctor.ToDto();
             return Result<DoctorDto>.Success(dto);
         }
@@ -85,7 +91,11 @@ namespace Application.Services
         {
             var doctor = await  _repository.GetWithAvailabities(id);
 
-            /// validar doctor
+            if (doctor is null)
+            {
+                return Result<DoctorResponse>.Failure($"Doctor with id {id} does not exist");
+            }
+
             var dto = new DoctorResponse()
             {
                 Id = id,
@@ -106,7 +116,10 @@ namespace Application.Services
         {
             Doctor doctor = await _repository.GetByIdAsync(id);
 
-            ///validar doctor
+            if (doctor is null)
+            {
+                return Result<DoctorDto>.Failure($"Doctor with id {id} does not exist");
+            }
             doctor.Name = request.Name;
             doctor.LastName = request.LastName;
             doctor.PhoneNumber = request.PhoneNumber;
