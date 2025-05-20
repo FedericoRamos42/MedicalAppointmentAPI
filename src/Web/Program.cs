@@ -95,10 +95,24 @@ builder.Services.AddAuthentication("Bearer")
 #endregion
 
 
-//SqlLite connection
+#region SqlLite connection
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlite(builder.Configuration.GetConnectionString("DbConnectionStrings")));
+#endregion
 
+#region Cors
+var corsPolicy = "AllowReactApp";
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(name: corsPolicy,
+        policy =>
+        {
+            policy.SetIsOriginAllowed(origin => origin.StartsWith("http://localhost:"))
+                  .AllowAnyHeader()
+                  .AllowAnyMethod();
+        });
+});
+#endregion
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -107,6 +121,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.UseCors(corsPolicy);
 
 app.UseHttpsRedirection();
 
