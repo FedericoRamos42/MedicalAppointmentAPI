@@ -5,5 +5,6 @@
         Available,
         Canceled,
         Reserved,
+        Pending,
     }
 }

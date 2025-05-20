@@ -20,11 +20,24 @@ namespace Infrastructure.Data
         {
             await _dbContext.Set<T>().AddAsync(entity);
             await _dbContext.SaveChangesAsync();
+           
+        }
+
+        public async Task<int> CountAsync(Expression<Func<T, bool>>? filter = null)
+        {
+            IQueryable<T> query = _dbContext.Set<T>();
+
+            if (filter != null)
+            {
+                query = query.Where(filter);
+            }
+
+            return await query.CountAsync();
         }
 
         public async Task DeleteAsync(T entity)
         {
-             _dbContext.Set<T>().Remove(entity);
+                _dbContext.Set<T>().Remove(entity);
                 await _dbContext.SaveChangesAsync();
         }
 

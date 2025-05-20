@@ -1,4 +1,5 @@
-﻿using Domain.Entities;
+﻿using System.Reflection.Emit;
+using Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -14,6 +15,11 @@ namespace Infrastructure.Configurations
                    .WithMany(s => s.Doctors)
                    .HasForeignKey(d => d.SpecialtyId)
                    .IsRequired();
+
+           builder.HasMany(d => d.Availabilities)
+                  .WithOne(a => a.Doctor)
+                  .HasForeignKey(a => a.DoctorId)
+                  .OnDelete(DeleteBehavior.Cascade);
 
         }
     }

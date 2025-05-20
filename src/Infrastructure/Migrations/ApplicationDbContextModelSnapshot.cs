@@ -54,6 +54,32 @@ namespace Infrastructure.Migrations
                     b.ToTable("Appointment", (string)null);
                 });
 
+            modelBuilder.Entity("Domain.Entities.Availability", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("DayOfWeek")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("DoctorId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<TimeSpan>("EndTime")
+                        .HasColumnType("TEXT");
+
+                    b.Property<TimeSpan>("StartTime")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("DoctorId");
+
+                    b.ToTable("Availability", (string)null);
+                });
+
             modelBuilder.Entity("Domain.Entities.MedicalHistory", b =>
                 {
                     b.Property<int>("Id")
@@ -242,6 +268,17 @@ namespace Infrastructure.Migrations
                     b.Navigation("Patient");
                 });
 
+            modelBuilder.Entity("Domain.Entities.Availability", b =>
+                {
+                    b.HasOne("Domain.Entities.Doctor", "Doctor")
+                        .WithMany("Availabilities")
+                        .HasForeignKey("DoctorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Doctor");
+                });
+
             modelBuilder.Entity("Domain.Entities.MedicalHistory", b =>
                 {
                     b.HasOne("Domain.Entities.Appointment", "Appoinment")
@@ -291,6 +328,8 @@ namespace Infrastructure.Migrations
             modelBuilder.Entity("Domain.Entities.Doctor", b =>
                 {
                     b.Navigation("Appoinments");
+
+                    b.Navigation("Availabilities");
 
                     b.Navigation("MedicalHistories");
                 });
