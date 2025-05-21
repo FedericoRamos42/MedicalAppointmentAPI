@@ -5,6 +5,7 @@ using Application.Models.Request;
 using Application.Models.Response;
 using Application.Result;
 using Application.Validations.Doctor;
+using Domain.Abstractions;
 using Domain.Entities;
 using Domain.Interfaces;
 using FluentValidation;
@@ -132,7 +133,21 @@ namespace Application.Services
             var dto = doctor.ToDto();
             return Result<DoctorDto>.Success(dto);
         }
+        public async Task<Result<PaginatedList<DoctorDto>>> GetPaginated(int pageIndex, int pageSize)
+        {
+            var paged = await _repository.GetPaginatedAsync(pageIndex, pageSize);
 
-       
+            var dtoList = paged.Items.ToListDto(); 
+
+            var dtoResult = new PaginatedList<DoctorDto>(
+                dtoList,
+                paged.PageIndex,
+                paged.TotalPages
+            );
+
+            return Result<PaginatedList<DoctorDto>>.Success(dtoResult);
+        }
+
+
     }
 }

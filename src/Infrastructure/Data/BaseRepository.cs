@@ -1,4 +1,6 @@
-﻿using Domain.Interfaces;
+﻿using Domain.Abstractions;
+using Domain.Interfaces;
+using Infrastructure.Utils;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -51,6 +53,7 @@ namespace Infrastructure.Data
             return await _dbContext.Set<T>().FindAsync(id);  
         }
 
+
         public async Task<IEnumerable<T>> Search(Expression<Func<T, bool>> predicate)
         {
             return await _dbContext.Set<T>().Where(predicate).ToListAsync();
@@ -61,5 +64,20 @@ namespace Infrastructure.Data
             _dbContext.Set<T>().Update(entity);
             await _dbContext.SaveChangesAsync();
         }
+        public async Task<PaginatedList<T>> GetPaginatedAsync(int pageIndex, int pageSize, Expression<Func<T, object>>? orderBy = null, Expression<Func<T, bool>>? filter = null)
+        {
+            IQueryable<T> query = _dbContext.Set<T>();
+
+            if (filter != null)
+                query = query.Where(filter);
+
+            if (orderBy != null)
+                query = query.OrderBy(orderBy);
+
+            return await query.ToPaginatedListAsync(pageIndex, pageSize);
+
+        }
+        
+        }
     }
-}
+
