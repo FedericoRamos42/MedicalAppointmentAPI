@@ -8,6 +8,7 @@ using Application.Mappers;
 using Application.Models;
 using Application.Models.Request;
 using Application.Result;
+using Domain.Abstractions;
 using Domain.Entities;
 using Domain.Interfaces;
 using FluentValidation;
@@ -84,6 +85,20 @@ namespace Application.Services
             await _availabilityRepository.UpdateAsync(availability);
             var dto = availability.ToDto();
             return Result<AvailabilityDto>.Success(dto);
+        }
+        public async Task<Result<PaginatedList<AvailabilityDto>>> GetPaginated(int pageIndex, int pageSize)
+        {
+            var paged = await _availabilityRepository.GetPaginatedAsync(pageIndex, pageSize);
+
+            var dtoList = paged.Items.ToListDto();
+
+            var dtoResult = new PaginatedList<AvailabilityDto>(
+                dtoList,
+                paged.PageIndex,
+                paged.TotalPages
+            );
+
+            return Result<PaginatedList<AvailabilityDto>>.Success(dtoResult);
         }
     }
 }

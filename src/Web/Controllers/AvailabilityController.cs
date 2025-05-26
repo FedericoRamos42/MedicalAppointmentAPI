@@ -1,5 +1,6 @@
 ﻿using Application.Interfaces;
 using Application.Models.Request;
+using Application.Services;
 using Domain.Entities;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -34,6 +35,12 @@ namespace Web.Controllers
         {
             var availability = await _availabilityService.Delete(id);
             return Ok(availability);
+        }
+        [HttpGet("paginated")]
+        public async Task<IActionResult> GetPaginated([FromQuery] int pageIndex, [FromQuery] int pageSize = 5)
+        {
+            var paginated = await _availabilityService.GetPaginated(pageIndex, pageSize);
+            return Ok(paginated);
         }
 
     }

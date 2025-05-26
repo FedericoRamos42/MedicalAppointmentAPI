@@ -1,6 +1,7 @@
 ﻿using Application.Models;
 using Application.Models.Request;
 using Application.Result;
+using Domain.Abstractions;
 using Domain.Enums;
 using System;
 using System.Collections.Generic;
@@ -22,6 +23,7 @@ namespace Application.Interfaces
         Task<Result<IEnumerable<AppointmentDto>>> GetByStatus(int id, AppointmentStatus status);
         Task<Result<IEnumerable<TimeSpan>>> GetAppointmentAvailabilited(int doctorId, DateTime date);
         Task<Result<AppointmentDto>> Cancel(int appointmentId);
+        Task<Result<PaginatedList<AppointmentDto>>> GetPaginated(int pageIndex, int pageSize);
 
     }
 }

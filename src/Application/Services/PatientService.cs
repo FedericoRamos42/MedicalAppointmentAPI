@@ -3,6 +3,7 @@ using Application.Mappers;
 using Application.Models;
 using Application.Models.Request;
 using Application.Result;
+using Domain.Abstractions;
 using Domain.Entities;
 using Domain.Enums;
 using Domain.Interfaces;
@@ -118,6 +119,20 @@ namespace Application.Services
             await _repository.UpdateAsync(patient); 
             var dto = patient.ToDto();  
             return Result<PatientDto>.Success(dto);
+        }
+        public async Task<Result<PaginatedList<PatientDto>>> GetPaginated(int pageIndex, int pageSize)
+        {
+            var paged = await _repository.GetPaginatedAsync(pageIndex, pageSize);
+
+            var dtoList = paged.Items.ToListDto();
+
+            var dtoResult = new PaginatedList<PatientDto>(
+                dtoList,
+                paged.PageIndex,
+                paged.TotalPages
+            );
+
+            return Result<PaginatedList<PatientDto>>.Success(dtoResult);
         }
     }
 }

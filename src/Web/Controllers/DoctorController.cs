@@ -52,10 +52,10 @@ namespace Web.Controllers
             var doctor = await _doctorService.Create(request);
             return Ok(doctor);
         }
-        [HttpGet("/Paginated/{index}")]
-        public async Task<IActionResult> GetPaginated(int index, [FromQuery] int pageSize)
+        [HttpGet("paginated")]
+        public async Task<IActionResult> GetPaginated([FromQuery] int pageIndex, [FromQuery] int pageSize = 5)
         {
-            var paginated = await _doctorService.GetPaginated(index, pageSize);
+            var paginated = await _doctorService.GetPaginated(pageIndex, pageSize);
             return Ok(paginated);
         }
     }

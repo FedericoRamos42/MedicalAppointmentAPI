@@ -4,6 +4,7 @@ using Application.Mappers;
 using Application.Models;
 using Application.Models.Request;
 using Application.Result;
+using Domain.Abstractions;
 using Domain.Entities;
 using Domain.Enums;
 using Domain.Interfaces;
@@ -178,6 +179,20 @@ namespace Application.Services
                 }
             }
             return Result<IEnumerable<TimeSpan>>.Success(list);
+        }
+        public async Task<Result<PaginatedList<AppointmentDto>>> GetPaginated(int pageIndex, int pageSize)
+        {
+            var paged = await _appointmentRepository.GetPaginatedAsync(pageIndex, pageSize);
+
+            var dtoList = paged.Items.ToListDto();
+
+            var dtoResult = new PaginatedList<AppointmentDto>(
+                dtoList,
+                paged.PageIndex,
+                paged.TotalPages
+            );
+
+            return Result<PaginatedList<AppointmentDto>>.Success(dtoResult);
         }
 
 

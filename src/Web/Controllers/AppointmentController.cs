@@ -71,6 +71,12 @@ namespace Web.Controllers
             var list = await _appointmentService.GetAppointmentAvailabilited(doctorId, date);
             return Ok(list);
         }
+        [HttpGet("paginated")]
+        public async Task<IActionResult> GetPaginated([FromQuery] int pageIndex, [FromQuery] int pageSize = 5)
+        {
+            var paginated = await _appointmentService.GetPaginated(pageIndex, pageSize);
+            return Ok(paginated);
+        }
 
 
     }

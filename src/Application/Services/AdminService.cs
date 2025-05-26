@@ -3,6 +3,7 @@ using Application.Mappers;
 using Application.Models;
 using Application.Models.Request;
 using Application.Result;
+using Domain.Abstractions;
 using Domain.Entities;
 using Domain.Interfaces;
 using FluentValidation;
@@ -108,6 +109,20 @@ namespace Application.Services
             var dto = admin.ToDto();
             return Result<AdminDto>.Success(dto);
 
+        }
+        public async Task<Result<PaginatedList<AdminDto>>> GetPaginated(int pageIndex, int pageSize)
+        {
+            var paged = await _repository.GetPaginatedAsync(pageIndex, pageSize);
+
+            var dtoList = paged.Items.ToListDto();
+
+            var dtoResult = new PaginatedList<AdminDto>(
+                dtoList,
+                paged.PageIndex,
+                paged.TotalPages
+            );
+
+            return Result<PaginatedList<AdminDto>>.Success(dtoResult);
         }
     }
 }

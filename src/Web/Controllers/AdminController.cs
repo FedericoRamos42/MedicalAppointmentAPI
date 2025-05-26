@@ -1,5 +1,6 @@
 ﻿using Application.Interfaces;
 using Application.Models.Request;
+using Application.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -48,6 +49,12 @@ namespace Web.Controllers
         {
             var admin = await _service.Create(request);
             return Ok(admin);
+        }
+        [HttpGet("paginated")]
+        public async Task<IActionResult> GetPaginated([FromQuery] int pageIndex, [FromQuery] int pageSize = 5)
+        {
+            var paginated = await _service.GetPaginated(pageIndex, pageSize);
+            return Ok(paginated);
         }
 
     }

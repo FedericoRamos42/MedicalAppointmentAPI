@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Domain.Abstractions;
 
 namespace Application.Interfaces
 {
@@ -16,6 +17,7 @@ namespace Application.Interfaces
         Task<Result<PatientDto>> Create(PatientCreateRequest request);
         Task<Result<PatientDto>> Update(int id, PatientUpdateRequest request);
         Task<Result<PatientDto>> Delete(int id);
+        Task<Result<PaginatedList<PatientDto>>> GetPaginated(int pageIndex, int pageSize);
 
     }
 }

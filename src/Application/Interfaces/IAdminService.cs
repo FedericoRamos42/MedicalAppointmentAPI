@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Application.Models;
 using Application.Models.Request;
 using Application.Result;
+using Domain.Abstractions;
 
 namespace Application.Interfaces
 {
@@ -16,5 +17,6 @@ namespace Application.Interfaces
         Task<Result<AdminDto>> Create(AdminCreateRequest request);
         Task<Result<AdminDto>> Update(int id,AdminUpdateRequest request);
         Task<Result<AdminDto>> Delete(int id);
+        Task<Result<PaginatedList<AdminDto>>> GetPaginated(int pageIndex, int pageSize);
     }
 }
