@@ -44,7 +44,7 @@ namespace Web.Controllers
         public async Task<IActionResult> Create([FromBody] MedicalHistoryCreateRequest request)
         {
             var result = await _service.Create(request);
-            return Ok(result);
+            return Created(string.Empty, result);
         }
         [HttpGet("ByPatient/{id}")]
         public async Task<IActionResult> GetByPatientId(int id)

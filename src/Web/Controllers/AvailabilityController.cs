@@ -21,7 +21,7 @@ namespace Web.Controllers
         public async Task<IActionResult> Create(AvailabilityCreateRequest request)
         {
             var result = await _availabilityService.Create(request);
-            return Ok(result);
+            return Created(string.Empty, result);
 
         }
         [HttpPut("{id}")]

@@ -72,7 +72,7 @@ namespace Web.Controllers
             {
                 return NotFound(result);
             }
-            return Ok(result);
+            return Created(string.Empty, result);
         }
         [HttpDelete]
         public async Task<IActionResult> Delete (int id)

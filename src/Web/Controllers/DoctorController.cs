@@ -63,7 +63,7 @@ namespace Web.Controllers
         public async Task<IActionResult> Create([FromBody] DoctorCreateRequest request)
         {
             var result = await _doctorService.Create(request);
-            return Ok(result);
+            return Created(string.Empty, result);
         }
         [HttpGet("paginated")]
         public async Task<IActionResult> GetPaginated([FromQuery] int pageIndex, [FromQuery] int pageSize = 5)
