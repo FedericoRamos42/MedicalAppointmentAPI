@@ -47,9 +47,16 @@ namespace Application.Services
             var patient = await _patientRepository.GetByIdAsync(request.PatientId);
             if (patient is null)
             {
-                return Result<MedicalHistoryDto>.Failure($"Doctor with Id {request.DoctorId} dows not exist");
+                return Result<MedicalHistoryDto>.Failure($"Doctor with Id {request.DoctorId} does not exist");
             }
-
+            if (request.AppointmentId != null)
+            {
+                var appointment = await _appointmentRepository.GetByIdAsync(request.AppointmentId);
+                if (appointment is null)
+                {
+                    return Result<MedicalHistoryDto>.Failure($"Appointment with Id {request.AppointmentId} does not exist");
+                }
+            }
             MedicalHistory medicalHistory = new MedicalHistory()
             {
                 PatientId = request.PatientId,
@@ -95,6 +102,22 @@ namespace Application.Services
 
             var dto = medicalHistory.ToDto();
             return Result<MedicalHistoryDto>.Success(dto);
+        }
+        public async Task<Result<IEnumerable<MedicalHistoryDto>>> GetByPatientIdAsync(int id)
+        {
+            IEnumerable<MedicalHistory> medicalHistory = await _medicalHistoryRepository.Search(mh => mh.PatientId == id);
+            
+            var list = medicalHistory.ToListDto();
+            return Result<IEnumerable<MedicalHistoryDto>>.Success(list);
+
+        }
+        public async Task<Result<IEnumerable<MedicalHistoryDto>>> GetByDoctorIdAsync(int id)
+        {
+            IEnumerable<MedicalHistory> medicalHistory = await _medicalHistoryRepository.Search(mh => mh.DoctorId == id);
+
+            var list = medicalHistory.ToListDto();
+            return Result<IEnumerable<MedicalHistoryDto>>.Success(list);
+
         }
     }
 }

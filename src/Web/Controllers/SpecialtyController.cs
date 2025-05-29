@@ -24,6 +24,10 @@ namespace Web.Controllers
         public async Task<IActionResult> GetById(int id)
         {
             var result = await _service.GetById(id);
+            if (!result.IsSuccess)
+            {
+                return NotFound(result);
+            }
             return Ok(result);
         }
         [HttpPost]
@@ -36,6 +40,10 @@ namespace Web.Controllers
         public async Task<IActionResult> Delete(int id)
         {
             var result = await _service.Delete(id);
+            if (!result.IsSuccess)
+            {
+                return NotFound(result);
+            }
             return Ok(result);
         }
         [HttpPut("{id}")]
@@ -43,6 +51,10 @@ namespace Web.Controllers
         public async Task<IActionResult> Update(int id, [FromBody] SpecialtyUpdateRequest request)
         {
             var result = await _service.Update(id,request);
+            if (!result.IsSuccess)
+            {
+                return NotFound(result);
+            }
             return Ok(result);
         }
     }

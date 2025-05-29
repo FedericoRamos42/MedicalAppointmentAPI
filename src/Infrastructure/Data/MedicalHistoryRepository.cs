@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Domain.Entities;
 using Domain.Interfaces;
+using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Data
 {
@@ -14,6 +15,7 @@ namespace Infrastructure.Data
         public MedicalHistoryRepository(ApplicationDbContext context) : base(context)
         {
             _context = context;
-        }
+        }      
+
     }
 }

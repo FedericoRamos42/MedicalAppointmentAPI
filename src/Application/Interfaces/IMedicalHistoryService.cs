@@ -15,5 +15,7 @@ namespace Application.Interfaces
         Task<Result<IEnumerable<MedicalHistoryDto>>> GetAll();
         Task<Result<MedicalHistoryDto>> Create(MedicalHistoryCreateRequest request);
         Task<Result<MedicalHistoryDto>> Delete(int id);
+        Task<Result<IEnumerable<MedicalHistoryDto>>> GetByPatientIdAsync(int id);
+        Task<Result<IEnumerable<MedicalHistoryDto>>> GetByDoctorIdAsync(int id);
     }
 }

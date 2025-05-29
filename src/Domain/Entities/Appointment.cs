@@ -8,7 +8,7 @@ namespace Domain.Entities
     {
         public Doctor Doctor { get; set; } = default!;
         public int DoctorId { get; set; }
-        public Patient? Patient { get; set; }
+        public Patient Patient { get; set; } = default!;
         public int? PatientId { get; set; }
         public MedicalHistory? MedicalHistory { get; set; }
         public DateTime Date { get; set; }

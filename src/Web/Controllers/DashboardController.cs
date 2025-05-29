@@ -17,14 +17,18 @@ namespace Web.Controllers
         [HttpGet("Admin")]
         public async Task<IActionResult> GetAdminDashboard()
         {
-            var dashboard = await _dashboardService.GetAdminDashboard();
-            return Ok(dashboard);
+            var result = await _dashboardService.GetAdminDashboard();
+            return Ok(result);
         }
         [HttpGet("Doctor/{id}")]
         public async Task<IActionResult> GetDoctorDashboard(int id)
         {
-            var dashboard = await _dashboardService.GetDoctorDashboard(id);
-            return Ok(dashboard);
+            var result = await _dashboardService.GetDoctorDashboard(id);
+            if (!result.IsSuccess)
+            {
+                return NotFound(result);
+            }
+            return Ok(result);
         }
     }
 }

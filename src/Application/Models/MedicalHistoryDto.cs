@@ -12,7 +12,7 @@ namespace Application.Models
         public int Id { get; set; }
         public int PatientId { get; set; }
         public int DoctorId { get; set; }
-        public Appointment? Appoinment { get; set; }
+        public int? AppoinmentId { get; set; }
         public string ReasonForVisit { get; set; } = default!;
         public string Diagnosis { get; set; } = default!;
         public string? Treatment { get; set; } = default!;

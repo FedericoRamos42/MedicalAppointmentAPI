@@ -20,27 +20,35 @@ namespace Web.Controllers
         [HttpPost]
         public async Task<IActionResult> Create(AvailabilityCreateRequest request)
         {
-            var availability = await _availabilityService.Create(request);
-            return Ok(availability);
+            var result = await _availabilityService.Create(request);
+            return Ok(result);
 
         }
         [HttpPut("{id}")]
         public async Task<IActionResult> Update(int id, AvailabilityUpdateRequest request)
         {
-            var availability = await _availabilityService.Update(id, request);
-            return Ok(availability);
+            var result = await _availabilityService.Update(id, request);
+            if (!result.IsSuccess)
+            {
+                return NotFound(result);
+            }
+            return Ok(result);
         }
         [HttpDelete("{id}")]
         public async Task<IActionResult>Delete(int id)
         {
-            var availability = await _availabilityService.Delete(id);
-            return Ok(availability);
+            var result = await _availabilityService.Delete(id);
+            if (!result.IsSuccess)
+            {
+                return NotFound(result);
+            }
+            return Ok(result);
         }
         [HttpGet("paginated")]
         public async Task<IActionResult> GetPaginated([FromQuery] int pageIndex, [FromQuery] int pageSize = 5)
         {
-            var paginated = await _availabilityService.GetPaginated(pageIndex, pageSize);
-            return Ok(paginated);
+            var result = await _availabilityService.GetPaginated(pageIndex, pageSize);
+            return Ok(result);
         }
 
     }

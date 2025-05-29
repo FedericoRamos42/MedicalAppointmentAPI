@@ -1,5 +1,6 @@
 ﻿using Application.Interfaces;
 using Application.Models.Request;
+using Domain.Entities;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Web.Controllers
@@ -16,47 +17,59 @@ namespace Web.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> Get(int id)
         {
-            var doctor = await _doctorService.GetById(id);
-            return Ok(doctor);
+            var result = await _doctorService.GetById(id);
+            if (!result.IsSuccess)
+            {
+                return NotFound(result);
+            }
+            return Ok(result);
         }
         [HttpGet("withAvailabilities/{id}")]
         public async Task<IActionResult> GetWithAvailabilities(int id)
         {
-            var doctor = await _doctorService.GetWithAvailabilities(id);
-            return Ok(doctor);
+            var result = await _doctorService.GetWithAvailabilities(id);
+            return Ok(result);
         }
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
-            var doctors = await _doctorService.GetAll();
-            return Ok(doctors);
+            var result = await _doctorService.GetAll();
+            return Ok(result);
         }
 
         [HttpPut("{id}")]
         public async Task<IActionResult> Update(int id, [FromBody] DoctorUpdateRequest request)
         {
-            var doctor = await _doctorService.Update(id, request);
-            return Ok(doctor);
+            var result = await _doctorService.Update(id, request);
+            if (!result.IsSuccess)
+            {
+                return NotFound(result);
+            }
+            return Ok(result);
         }
 
         [HttpDelete("{Id}")]
         public async Task<IActionResult> Delete(int id)
         {
-            var doctor = await _doctorService.Delete(id);
-            return Ok(doctor);
+            var result = await _doctorService.Delete(id);
+            if (!result.IsSuccess)
+            {
+                return NotFound(result);
+            }
+            return Ok(result);
         }
 
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] DoctorCreateRequest request)
         {
-            var doctor = await _doctorService.Create(request);
-            return Ok(doctor);
+            var result = await _doctorService.Create(request);
+            return Ok(result);
         }
         [HttpGet("paginated")]
         public async Task<IActionResult> GetPaginated([FromQuery] int pageIndex, [FromQuery] int pageSize = 5)
         {
-            var paginated = await _doctorService.GetPaginated(pageIndex, pageSize);
-            return Ok(paginated);
+            var result = await _doctorService.GetPaginated(pageIndex, pageSize);
+            return Ok(result);
         }
     }
 }
