@@ -20,7 +20,7 @@ namespace Application.Services
         public async Task<Result<DashboardAdminDto>> GetAdminDashboard()
         {
             var totalAppointments = await _repositoryAppointment.CountAsync();
-            var confirmedAppointments = await _repositoryAppointment.CountAsync(a => a.Status == Domain.Enums.AppointmentStatus.Pending);
+            var confirmedAppointments = await _repositoryAppointment.CountAsync(a => a.Status == Domain.Enums.AppointmentStatus.Confirmed);
             var canceledAppointments = await _repositoryAppointment.CountAsync(a => a.Status == Domain.Enums.AppointmentStatus.Canceled);
             var todayAppointments = await _repositoryAppointment.CountAsync(a=> a.Date.Date == DateTime.Today);
             var patient = await _repositoryPatient.CountAsync(p => p.IsAvailable == true);
@@ -43,7 +43,7 @@ namespace Application.Services
             
             var totalAppointments = await _repositoryAppointment.CountAsync(a=>a.DoctorId == doctorId);
             var todayAppointment = await _repositoryAppointment.CountAsync(a=>a.DoctorId == doctorId && a.Date.Date == DateTime.Today);
-            var confirmedAppointments = await _repositoryAppointment.CountAsync(a => a.DoctorId == doctorId && a.Status == Domain.Enums.AppointmentStatus.Pending);
+            var confirmedAppointments = await _repositoryAppointment.CountAsync(a => a.DoctorId == doctorId && a.Status == Domain.Enums.AppointmentStatus.Confirmed);
             var canceledAppointments = await _repositoryAppointment.CountAsync(a=> a.DoctorId == doctorId && a.Status == Domain.Enums.AppointmentStatus.Canceled);
             var dto = new DashboardDoctorDto()
             {

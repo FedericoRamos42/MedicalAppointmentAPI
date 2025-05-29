@@ -70,13 +70,11 @@ builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
 builder.Services.AddScoped<IDashboardService, DashboardService>();
 builder.Services.AddScoped<IPasswordHasherService, PasswordHasherService>();
 builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
+builder.Services.AddScoped<IMedicalHistoryRepository, MedicalHistoryRepository>();
+builder.Services.AddScoped<IMedicalHistoryService, MedicalHistoryService>();
 builder.Services.AddHttpContextAccessor();
-
-
 builder.Services.AddValidatorsFromAssemblyContaining<CreateDoctorValidator>();
-
 #endregion
-
 #region Authentication
 builder.Services.AddAuthentication("Bearer") 
     .AddJwtBearer(options => 
@@ -113,6 +111,7 @@ builder.Services.AddCors(options =>
         });
 });
 #endregion
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

@@ -11,9 +11,7 @@ namespace Application.Models
     {
         public int Id { get; set; }
         public int PatientId { get; set; }
-        public string PatientName { get; set; } = default!;
         public int DoctorId { get; set; }
-        public string DoctorName { get; set; } = default!;
         public Appointment? Appoinment { get; set; }
         public string ReasonForVisit { get; set; } = default!;
         public string Diagnosis { get; set; } = default!;

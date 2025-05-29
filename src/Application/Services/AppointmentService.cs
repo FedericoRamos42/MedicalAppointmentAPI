@@ -59,7 +59,7 @@ namespace Application.Services
                 DoctorId = request.DoctorId,
                 Time = request.Time,
                 Date = request.Date,
-                Status = AppointmentStatus.Pending,
+                Status = AppointmentStatus.Confirmed,
             };
 
 
@@ -168,7 +168,7 @@ namespace Application.Services
                 {
                     bool isOccupied = appointments.Any(a => a.Date == date.Date
                                                        && a.Time == timeStart
-                                                       && a.Status == AppointmentStatus.Pending);
+                                                       && a.Status == AppointmentStatus.Confirmed);
 
                     if (!isOccupied)
                     {

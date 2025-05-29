@@ -35,7 +35,7 @@ namespace Application.Result
             IsSuccess = false;
             ErrorMessage = "Error Models";
             ModelsErrors = errorModels;
-            
+
         }
 
         public static Result<T> Success(T data)
