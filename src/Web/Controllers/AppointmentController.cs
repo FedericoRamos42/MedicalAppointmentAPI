@@ -1,4 +1,5 @@
 ﻿using Application.Interfaces;
+using Application.Models;
 using Application.Models.Request;
 using Application.Result;
 using Domain.Entities;
@@ -13,9 +14,11 @@ namespace Web.Controllers
     public class AppointmentController : ControllerBase
     {
         private readonly IAppointmentService _appointmentService;
-        public AppointmentController(IAppointmentService appointmentService)
+        private readonly IEmailService _emailService;
+        public AppointmentController(IAppointmentService appointmentService,IEmailService emailService)
         {
             _appointmentService = appointmentService;
+            _emailService = emailService;   
         }
         [HttpGet("{id}")]
         public async Task<IActionResult> Get(int id)
@@ -54,7 +57,7 @@ namespace Web.Controllers
             }
             return Ok(result);
         }
-        [HttpGet("/status/{id}")]
+        [HttpGet("status/{id}")]
         public async Task<IActionResult> GetByStatus(int id,[FromQuery] AppointmentStatus status)
         {
             var result = await _appointmentService.GetByStatus(id, status);
@@ -84,7 +87,7 @@ namespace Web.Controllers
             }
             return Ok(result);
         }
-        [HttpPut("/{id}")]
+        [HttpPut("canceled/{id}")]
         public async Task<IActionResult> Cancel (int id)
         {
             var result = await _appointmentService.Cancel(id);
@@ -95,7 +98,7 @@ namespace Web.Controllers
             return Ok(result);
         }
 
-        [HttpGet("/availabilities{doctorId}")]
+        [HttpGet("availabilities{doctorId}")]
         public async Task<IActionResult> Get([FromRoute] int doctorId, [FromQuery] DateTime date)
         {
             var result = await _appointmentService.GetAppointmentAvailabilited(doctorId, date);
@@ -112,6 +115,11 @@ namespace Web.Controllers
             return Ok(result);
         }
 
-
+        [HttpPost("email")]
+        public IActionResult SendEmail(EmailDto request)
+        {
+            _emailService.SendEmail(request);
+            return Ok();
+        }
     }
 }

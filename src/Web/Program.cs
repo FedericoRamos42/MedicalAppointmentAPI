@@ -74,6 +74,7 @@ builder.Services.AddScoped<IMedicalHistoryRepository, MedicalHistoryRepository>(
 builder.Services.AddScoped<IMedicalHistoryService, MedicalHistoryService>();
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddValidatorsFromAssemblyContaining<CreateDoctorValidator>();
+builder.Services.AddScoped<IEmailService, EmailService>();
 #endregion
 #region Authentication
 builder.Services.AddAuthentication("Bearer") 
