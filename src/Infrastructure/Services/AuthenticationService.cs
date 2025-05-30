@@ -1,5 +1,6 @@
 ﻿using Application.Interfaces;
 using Application.Models.Request;
+using Application.Result;
 using Domain.Entities;
 using Domain.Interfaces;
 using Microsoft.Extensions.Configuration;
@@ -26,16 +27,19 @@ namespace Infrastructure.Services
             _passwordHasher = passwordHasherService;
         }
 
-        public async Task<string?> AuthenticateCredentials(CredentialForRequest credentialForRequest)
+        public async Task<Result<string>> AuthenticateCredentials(CredentialForRequest credentialForRequest)
         {
             User? user = await ValidateUser(credentialForRequest);
             if (user == null)
             {
-                return null;
+                return Result<string>.Failure($"Usuario no encontrado");
             }
             var claims =  GetUserClaimsAsync(user);
             var token = GenerateToken(claims);
-            return token;            
+            if (token == null) {
+                return Result<string>.Failure($"error");
+            }
+            return Result<string>.Success(token);            
         }
 
 

@@ -1,4 +1,5 @@
 ﻿using Application.Models.Request;
+using Application.Result;
 using Domain.Entities;
 using System;
 using System.Collections.Generic;
@@ -12,8 +13,9 @@ namespace Application.Interfaces
     public interface IAuthenticationService
     {
         Task<User?> ValidateUser(CredentialForRequest credentialForRequest);
-        Task<string?> AuthenticateCredentials(CredentialForRequest credentialForRequest);
+        Task<Result<string>> AuthenticateCredentials(CredentialForRequest credentialForRequest);
         IEnumerable<Claim> GetUserClaimsAsync(User user);
         string? GenerateToken(IEnumerable<Claim> claims);
+
     }
 }

@@ -3,13 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Application.Models.Response;
-using Application.Result;
+using Application.Models;
 
 namespace Application.Interfaces
 {
-    public interface ICurrentUserService
+    public interface IEmailService
     {
-        Result<ProfileResponse> GetProfile();
+        void SendEmail(EmailDto request);
     }
 }

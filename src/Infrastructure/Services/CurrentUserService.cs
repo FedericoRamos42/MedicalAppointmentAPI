@@ -1,4 +1,6 @@
 ﻿using Application.Interfaces;
+using Application.Models.Response;
+using Application.Result;
 using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
@@ -16,21 +18,26 @@ namespace Infrastructure.Services
         {
             _httpContextAccessor = httpContextAccessor;
         }
-        public string? GetUserEmail()
-        {
-            return _httpContextAccessor.HttpContext?.User?.FindFirst(ClaimTypes.Email)?.Value;
 
-        }
+        public Result<ProfileResponse> GetProfile()
+        { 
+            var id = _httpContextAccessor.HttpContext?.User?.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            var email =  _httpContextAccessor.HttpContext?.User?.FindFirst(ClaimTypes.Email)?.Value;
+            var role = _httpContextAccessor.HttpContext?.User?.FindFirst(ClaimTypes.Role)?.Value;
 
-        public string? GetUserId()
-        {
-            return _httpContextAccessor.HttpContext?.User?.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-        }
+            if (id == null || email == null || role == null) 
+            {
+                return Result<ProfileResponse>.Failure("error");
+            }
 
-        public string? GetUserRole()
-        {
-            return _httpContextAccessor.HttpContext?.User?.FindFirst(ClaimTypes.Role)?.Value;
+            var dto = new ProfileResponse
+            {
+                Id = id,
+                Email = email,
+                Role = role,
+            };
 
+            return Result<ProfileResponse>.Success(dto);
         }
     }
 }

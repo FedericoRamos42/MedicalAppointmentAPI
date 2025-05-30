@@ -1,7 +1,5 @@
 ﻿using Application.Interfaces;
 using Application.Models.Request;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Web.Controllers
@@ -21,29 +19,25 @@ namespace Web.Controllers
         [HttpPost]
         public async Task<IActionResult> AuthenticateUser([FromBody] CredentialForRequest request)
         {
-            var token = await _authenticationService.AuthenticateCredentials(request);
+            var result = await _authenticationService.AuthenticateCredentials(request);
 
-            if (token is not null)
+            if (!result.IsSuccess)
             {
-                return (Ok(token));
+                return Unauthorized(result);
             }
+            return Ok(result);
 
-            return Unauthorized();
         }
-        //[Authorize]
-        [HttpGet("/FindUserClaims")]
+        [HttpGet("FindUserClaims")]
         public IActionResult GetMyProfile()
         {
-            var userId = _currentUserService.GetUserId();
-            if (userId is null) { return Unauthorized(); }  
-            var email = _currentUserService.GetUserEmail();
-            var role = _currentUserService.GetUserRole();
-            return Ok(new
+            var result = _currentUserService.GetProfile();
+            if (!result.IsSuccess)
             {
-                Id = userId,
-                Email = email,
-                Role = role
-            });
+                Unauthorized(result);
+            }
+
+            return Ok(result);
         }
 
     }
