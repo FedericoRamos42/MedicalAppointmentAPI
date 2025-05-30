@@ -1,4 +1,5 @@
 ﻿using Application.Interfaces;
+using Application.Models;
 using Application.Models.Request;
 using Application.Result;
 using Domain.Entities;
@@ -20,11 +21,16 @@ namespace Infrastructure.Services
        private readonly IAuthenticationRepository _authenticationRepository;
        private readonly IConfiguration _configuration;
        private readonly IPasswordHasherService _passwordHasher;
-       public AuthenticationService(IAuthenticationRepository authenticationRepository, IConfiguration configuration, IPasswordHasherService passwordHasherService)
+       private readonly IEmailService _emailService;
+       public AuthenticationService(IAuthenticationRepository authenticationRepository, 
+           IConfiguration configuration,
+           IPasswordHasherService passwordHasherService,
+           IEmailService emailService)
         {
             _authenticationRepository = authenticationRepository;
             _configuration = configuration;
             _passwordHasher = passwordHasherService;
+            _emailService = emailService;            
         }
 
         public async Task<Result<string>> AuthenticateCredentials(CredentialForRequest credentialForRequest)
@@ -32,12 +38,12 @@ namespace Infrastructure.Services
             User? user = await ValidateUser(credentialForRequest);
             if (user == null)
             {
-                return Result<string>.Failure($"Usuario no encontrado");
+                return Result<string>.Failure($"User not found");
             }
             var claims =  GetUserClaimsAsync(user);
             var token = GenerateToken(claims);
             if (token == null) {
-                return Result<string>.Failure($"error");
+                return Result<string>.Failure($"Error");
             }
             return Result<string>.Success(token);            
         }
@@ -81,6 +87,77 @@ namespace Infrastructure.Services
 
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
+        public async Task<Result<string>> ForgotPasswordAsync(string email)
+        {
+            var user = await _authenticationRepository.GetUserByEmail(email);
+            if (user == null || !user.IsAvailable)
+                return Result<string>.Failure("User not found or inactive");
+
+            List<Claim> claims = GetUserClaimsAsync(user).ToList();
+            claims.Add(new Claim("ResetPassword", "true"));
+
+            var token = GenerateToken(claims);
+
+            var link = $"http://localhost:4200/reset-password?token={token}";
+
+            var emailDto = new EmailDto
+            {
+                Para = user.Email,
+                Asunto = "Reset your password",
+                Contenido = $"""
+                <h2>Password recovery</h2>
+                <p>Click the link below to reset your password. It will expire shortly:</p>
+                <a href="{link}">Reset Password</a>
+            """
+            };
+            _emailService.SendEmail(emailDto);
+            return Result<string>.Success("Recovery email sent");
+        }
+        public async Task<Result<string>> ResetPasswordAsync(ResetPasswordDto resetPassword)
+        {
+            var handler = new JwtSecurityTokenHandler();
+            var key = Encoding.ASCII.GetBytes(_configuration["Authentication:SecretForKey"]);
+
+            var parameters = new TokenValidationParameters
+            {
+                ValidateIssuer = true,
+                ValidateAudience = true,
+                ValidateIssuerSigningKey = true,
+                ValidIssuer = _configuration["Authentication:Issuer"],
+                ValidAudience = _configuration["Authentication:Audience"],
+                IssuerSigningKey = new SymmetricSecurityKey(key),
+                ClockSkew = TimeSpan.Zero
+            };
+
+            ClaimsPrincipal principal;
+            try
+            {
+                principal = handler.ValidateToken(resetPassword.Token, parameters, out _);
+            }
+            catch
+            {
+                return Result<string>.Failure("The token is invalid or has expired.");
+            }
+
+            var email = principal.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
+            var resetFlag = principal.Claims.FirstOrDefault(c => c.Type == "ResetPassword")?.Value;
+
+            if (email == null || resetFlag != "true")
+                return Result<string>.Failure("Invalid token");
+
+            var user = await _authenticationRepository.GetUserByEmail(email);
+            if (user == null || !user.IsAvailable)
+                return Result<string>.Failure("Usuario no válido");
+
+            user.Password = _passwordHasher.HashPassword(resetPassword.NewPassword);
+            await _authenticationRepository.UpdateAsync(user);
+
+            return Result<string>.Success("Password changed");
+        }
+
+
+
+
 
     }
 }

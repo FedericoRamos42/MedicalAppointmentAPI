@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Domain.Interfaces
 {
-    public interface IAuthenticationRepository 
+    public interface IAuthenticationRepository : IBaseRepository<User>
     {
         Task<User?> GetUserByEmail(string email);
 

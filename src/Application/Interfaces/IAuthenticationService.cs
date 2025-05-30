@@ -16,6 +16,8 @@ namespace Application.Interfaces
         Task<Result<string>> AuthenticateCredentials(CredentialForRequest credentialForRequest);
         IEnumerable<Claim> GetUserClaimsAsync(User user);
         string? GenerateToken(IEnumerable<Claim> claims);
+        Task<Result<string>> ForgotPasswordAsync(string email);
+        Task<Result<string>> ResetPasswordAsync(ResetPasswordDto resetPassword);
 
     }
 }

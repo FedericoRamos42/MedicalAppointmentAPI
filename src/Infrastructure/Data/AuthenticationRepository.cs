@@ -10,10 +10,10 @@ using System.Threading.Tasks;
 
 namespace Infrastructure.Data
 {
-    public class AuthenticationRepository : IAuthenticationRepository
+    public class AuthenticationRepository : BaseRepository<User>, IAuthenticationRepository
     {
         private readonly ApplicationDbContext _context;
-        public AuthenticationRepository(ApplicationDbContext context)
+        public AuthenticationRepository(ApplicationDbContext context) : base(context)
         {
             _context = context;
         }
