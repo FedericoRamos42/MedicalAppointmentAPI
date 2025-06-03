@@ -9,6 +9,7 @@ using Domain.Abstractions;
 using Domain.Entities;
 using Domain.Interfaces;
 using FluentValidation;
+using System.Linq.Expressions;
 
 namespace Application.Services
 {
@@ -133,20 +134,64 @@ namespace Application.Services
             var dto = doctor.ToDto();
             return Result<DoctorDto>.Success(dto);
         }
-        public async Task<Result<PaginatedList<DoctorDto>>> GetPaginated(int pageIndex, int pageSize)
+        //public async Task<Result<PaginatedList<DoctorDto>>> GetPaginated(int pageIndex, int pageSize)
+        //{
+        //    var paged = await _repository.GetPaginatedAsync(pageIndex, pageSize);
+
+        //    var dtoList = paged.Items.ToListDto(); 
+
+        //    var dtoResult = new PaginatedList<DoctorDto>(
+        //        dtoList,
+        //        paged.PageIndex,
+        //        paged.TotalPages
+        //    );
+
+        //    return Result<PaginatedList<DoctorDto>>.Success(dtoResult);
+
+        //}
+        public async Task<Result<PaginatedList<DoctorDto>>> GetFilteredPaginatedAsync(int pageIndex,
+                                                                                      int pageSize,     
+                                                                                      DoctorFilterDto? filters = null,
+                                                                                      string orderBy = "Name") 
         {
-            var paged = await _repository.GetPaginatedAsync(pageIndex, pageSize);
 
-            var dtoList = paged.Items.ToListDto(); 
+            Expression<Func<Doctor, object>> include = d => d.Specialty;
 
+            Expression<Func<Doctor, object>> orderByExpression = orderBy.ToLower() switch
+            {
+                "id" => d => d.Id,
+                "name" => d => d.Name,
+                "specialty" => d => d.Specialty.Name,
+                "isavailable" => d => d.IsAvailable,
+                _ => d => d.Name 
+            };
+
+            Expression<Func<Doctor, bool>>? filter = null;
+            if (filters != null)
+            {
+                filter = d =>
+                    (string.IsNullOrEmpty(filters.SpecialtyName) || d.Specialty.Name.Contains(filters.SpecialtyName)) &&
+                    (string.IsNullOrEmpty(filters.Name) || d.Name.Contains(filters.Name)) &&
+                    (!filters.IsAvailable.HasValue || d.IsAvailable == filters.IsAvailable.Value);
+            }
+
+            var paged = await _repository.GetPaginatedAsync(
+                pageIndex,
+                pageSize,
+                include: include,
+                orderBy: orderByExpression, 
+                filter: filter
+            );
+
+            var dtoList = paged.Items.ToListDto();
             var dtoResult = new PaginatedList<DoctorDto>(
                 dtoList,
                 paged.PageIndex,
                 paged.TotalPages
             );
-
             return Result<PaginatedList<DoctorDto>>.Success(dtoResult);
         }
+
 
 
     }

@@ -64,9 +64,16 @@ namespace Infrastructure.Data
             _dbContext.Set<T>().Update(entity);
             await _dbContext.SaveChangesAsync();
         }
-        public async Task<PaginatedList<T>> GetPaginatedAsync(int pageIndex, int pageSize, Expression<Func<T, object>>? orderBy = null, Expression<Func<T, bool>>? filter = null)
+        public async Task<PaginatedList<T>> GetPaginatedAsync(int pageIndex,
+            int pageSize,
+            Expression<Func<T, object>>? include = null,
+            Expression<Func<T, object>>? orderBy = null,
+            Expression<Func<T, bool>>? filter = null)
         {
             IQueryable<T> query = _dbContext.Set<T>();
+
+            if (include != null)
+                query = query.Include(include);
 
             if (filter != null)
                 query = query.Where(filter);

@@ -17,7 +17,7 @@ namespace Domain.Interfaces
         Task DeleteAsync(T entity);
         Task<IEnumerable<T>> Search(Expression<Func<T, bool>> predicate);
         Task<int> CountAsync(Expression<Func<T, bool>>? filter = null);
-        Task<PaginatedList<T>> GetPaginatedAsync(int pageIndex, int pageSize = 5, Expression<Func<T, object>>? orderBy = null,
+        Task<PaginatedList<T>> GetPaginatedAsync(int pageIndex, int pageSize = 5, Expression<Func<T, object>>? include = null, Expression<Func<T, object>>? orderBy = null,
         Expression<Func<T, bool>>? filter = null);
         
 

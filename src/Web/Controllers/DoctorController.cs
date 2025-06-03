@@ -65,11 +65,21 @@ namespace Web.Controllers
             var result = await _doctorService.Create(request);
             return Created(string.Empty, result);
         }
-        [HttpGet("paginated")]
-        public async Task<IActionResult> GetPaginated([FromQuery] int pageIndex, [FromQuery] int pageSize = 5)
+        //[HttpGet("paginated")]
+        //public async Task<IActionResult> GetPaginated([FromQuery] int pageIndex, [FromQuery] int pageSize = 5)
+        //{
+        //    var result = await _doctorService.GetPaginated(pageIndex, pageSize);
+        //    return Ok(result);
+        //}
+        [HttpGet("GetFilteredDoctors")]
+        public async Task<IActionResult> GetFilteredDoctors([FromQuery] int pageIndex,
+                                                            [FromQuery] int pageSize = 5,                                                            
+                                                            [FromQuery] DoctorFilterDto? filter = null,
+                                                            [FromQuery] string? orderBy = "Name")
         {
-            var result = await _doctorService.GetPaginated(pageIndex, pageSize);
+            var result = await _doctorService.GetFilteredPaginatedAsync(pageIndex, pageSize, filter, orderBy);
             return Ok(result);
         }
+
     }
 }

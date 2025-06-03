@@ -111,7 +111,7 @@ namespace Infrastructure.Services
             """
             };
             _emailService.SendEmail(emailDto);
-            return Result<string>.Success("Recovery email sent");
+            return Result<string>.Success(link);
         }
         public async Task<Result<string>> ResetPasswordAsync(ResetPasswordDto resetPassword)
         {
@@ -147,12 +147,12 @@ namespace Infrastructure.Services
 
             var user = await _authenticationRepository.GetUserByEmail(email);
             if (user == null || !user.IsAvailable)
-                return Result<string>.Failure("Usuario no válido");
+                return Result<string>.Failure("Invalid user.");
 
             user.Password = _passwordHasher.HashPassword(resetPassword.NewPassword);
             await _authenticationRepository.UpdateAsync(user);
 
-            return Result<string>.Success("Password changed");
+            return Result<string>.Success("Your password has been successfully reset.");
         }
 
 

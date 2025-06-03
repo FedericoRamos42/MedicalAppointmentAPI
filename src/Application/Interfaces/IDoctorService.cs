@@ -19,7 +19,11 @@ namespace Application.Interfaces
         Task<Result<DoctorDto>> Update(int id, DoctorUpdateRequest request);
         Task<Result<DoctorDto>> Delete(int id);
         Task<Result<DoctorResponse>> GetWithAvailabilities(int id);
-        Task<Result<PaginatedList<DoctorDto>>> GetPaginated(int pageIndex
-            , int pageSize);
+        //Task<Result<PaginatedList<DoctorDto>>> GetPaginated(int pageIndex
+        //    , int pageSize);
+        Task<Result<PaginatedList<DoctorDto>>> GetFilteredPaginatedAsync(int pageIndex,
+                                                                         int pageSize,
+                                                                         DoctorFilterDto? filters = null,
+                                                                         string orderBy = "Name");
     }
 }

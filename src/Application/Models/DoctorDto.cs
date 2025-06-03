@@ -17,5 +17,7 @@ namespace Application.Models
         public int SpecialtyId { get; set; }
         public bool IsAvailable { get; set; }
 
+        public string? SpecialtyName { get; set; }
+
     }
 }
