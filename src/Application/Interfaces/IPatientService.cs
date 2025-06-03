@@ -18,6 +18,7 @@ namespace Application.Interfaces
         Task<Result<PatientDto>> Update(int id, PatientUpdateRequest request);
         Task<Result<PatientDto>> Delete(int id);
         Task<Result<PaginatedList<PatientDto>>> GetPaginated(int pageIndex, int pageSize);
+        Result<List<string>> GetMedicalInsaurances();
 
     }
 }

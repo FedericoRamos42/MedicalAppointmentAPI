@@ -2,6 +2,7 @@
 using Application.Models.Request;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
 
 namespace Web.Controllers
 {
@@ -32,7 +33,12 @@ namespace Web.Controllers
             var result = await _service.GetAll();
             return Ok(result);
         }
-
+        [HttpGet("HealtInsurances")]
+        public  IActionResult GetHealthInsurance()
+        {
+            var result = _service.GetMedicalInsaurances();
+            return Ok(result);
+        }
         [HttpPut("{id}")]
         public async Task<IActionResult> Update([FromRoute] int id, [FromBody] PatientUpdateRequest request)
         {

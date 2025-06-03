@@ -135,5 +135,11 @@ namespace Application.Services
 
             return Result<PaginatedList<PatientDto>>.Success(dtoResult);
         }
+
+        public Result<List<string>> GetMedicalInsaurances()
+        {
+            var list = Enum.GetNames(typeof(HealtInsurance)).ToList();
+            return Result<List<string>>.Success(list);
+        }
     }
 }
