@@ -87,13 +87,13 @@ namespace Application.Services
         }
         public async Task<Result<IEnumerable<MedicalHistoryDto>>> GetAll()
         {
-            IEnumerable<MedicalHistory> list = await _medicalHistoryRepository.GetAllAsync();
+            IEnumerable<MedicalHistory> list = await _medicalHistoryRepository.GetAll();
             var dto = list.ToListDto();
             return Result<IEnumerable<MedicalHistoryDto>>.Success(dto);
         }
         public async Task<Result<MedicalHistoryDto>> GetById(int id)
         {
-            MedicalHistory medicalHistory = await _medicalHistoryRepository.GetByIdAsync(id);
+            MedicalHistory medicalHistory = await _medicalHistoryRepository.GetById(id);
 
             if (medicalHistory is null)
             {
@@ -105,7 +105,7 @@ namespace Application.Services
         }
         public async Task<Result<IEnumerable<MedicalHistoryDto>>> GetByPatientIdAsync(int id)
         {
-            IEnumerable<MedicalHistory> medicalHistory = await _medicalHistoryRepository.Search(mh => mh.PatientId == id);
+            IEnumerable<MedicalHistory> medicalHistory = await _medicalHistoryRepository.Search(mh => mh.PatientId == id, mh=>mh.Patient, mh => mh.Doctor, mh=>mh.Appoinment);
             
             var list = medicalHistory.ToListDto();
             return Result<IEnumerable<MedicalHistoryDto>>.Success(list);
@@ -113,7 +113,7 @@ namespace Application.Services
         }
         public async Task<Result<IEnumerable<MedicalHistoryDto>>> GetByDoctorIdAsync(int id)
         {
-            IEnumerable<MedicalHistory> medicalHistory = await _medicalHistoryRepository.Search(mh => mh.DoctorId == id);
+            IEnumerable<MedicalHistory> medicalHistory = await _medicalHistoryRepository.Search(mh => mh.DoctorId == id, mh => mh.Patient, mh => mh.Appoinment);
 
             var list = medicalHistory.ToListDto();
             return Result<IEnumerable<MedicalHistoryDto>>.Success(list);

@@ -10,9 +10,9 @@ namespace Application.Models
     public class MedicalHistoryDto
     {
         public int Id { get; set; }
-        public int PatientId { get; set; }
-        public int DoctorId { get; set; }
-        public int? AppoinmentId { get; set; }
+        public string Patient { get; set; } = default!;
+        public string Doctor { get; set; } = default!;
+        public string? Appoinment { get; set; }
         public string ReasonForVisit { get; set; } = default!;
         public string Diagnosis { get; set; } = default!;
         public string? Treatment { get; set; } = default!;

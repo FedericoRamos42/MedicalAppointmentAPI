@@ -22,10 +22,11 @@ namespace Infrastructure.Services
         public Result<ProfileResponse> GetProfile()
         { 
             var id = _httpContextAccessor.HttpContext?.User?.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            var fullname = _httpContextAccessor.HttpContext?.User?.FindFirst(ClaimTypes.Name)?.Value;
             var email =  _httpContextAccessor.HttpContext?.User?.FindFirst(ClaimTypes.Email)?.Value;
             var role = _httpContextAccessor.HttpContext?.User?.FindFirst(ClaimTypes.Role)?.Value;
 
-            if (id == null || email == null || role == null) 
+            if (id == null || email == null || role == null || fullname == null) 
             {
                 return Result<ProfileResponse>.Failure("error");
             }
@@ -33,6 +34,7 @@ namespace Infrastructure.Services
             var dto = new ProfileResponse
             {
                 Id = id,
+                FullName= fullname,
                 Email = email,
                 Role = role,
             };

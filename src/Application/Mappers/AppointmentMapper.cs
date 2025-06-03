@@ -15,7 +15,7 @@ namespace Application.Mappers
             Id = appointment.Id,
             DoctorId = appointment.DoctorId,
             PatientId = appointment.PatientId,
-            Date = appointment.Date,
+            Date = appointment.Date.ToString("yyyy-mm-dd"),
             Time = appointment.Time,   
             Status = appointment.Status,
 

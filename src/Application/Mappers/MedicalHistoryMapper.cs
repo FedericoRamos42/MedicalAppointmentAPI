@@ -13,9 +13,9 @@ namespace Application.Mappers
         public static MedicalHistoryDto ToDto(this MedicalHistory medicalHistory) => new MedicalHistoryDto
         {
             Id = medicalHistory.Id,
-            PatientId = medicalHistory.PatientId,
-            DoctorId = medicalHistory.DoctorId,
-            AppoinmentId = medicalHistory.AppoinmentId,
+            Patient = medicalHistory.Patient.Name + " " + medicalHistory.Patient.LastName,
+            Doctor = medicalHistory.Doctor.Name + " " + medicalHistory.Doctor.LastName,
+            Appoinment = medicalHistory.Appoinment?.Date.ToString("yyyy-mm-dd"),
             ReasonForVisit = medicalHistory.ReasonForVisit,
             Diagnosis = medicalHistory.Diagnosis,
             Treatment = medicalHistory.Treatment,

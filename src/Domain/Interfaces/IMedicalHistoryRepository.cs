@@ -9,5 +9,7 @@ namespace Domain.Interfaces
 {
     public interface IMedicalHistoryRepository : IBaseRepository<MedicalHistory>
     {
+        Task<MedicalHistory> GetById(int id);
+        Task<IEnumerable<MedicalHistory>> GetAll();
     }
 }

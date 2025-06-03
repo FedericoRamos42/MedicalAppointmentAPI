@@ -14,7 +14,6 @@ namespace Application.Models
         public string PhoneNumber { get; set; } = default!;
         public string Address { get; set; } = default!;
         public string Email { get; set; } = default!;
-        public int SpecialtyId { get; set; }
         public bool IsAvailable { get; set; }
 
         public string? SpecialtyName { get; set; }

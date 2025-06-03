@@ -60,7 +60,7 @@ namespace Application.Services
 
         public async Task<Result<DoctorDto>> Delete(int id)
         {
-            var doctor = await _repository.GetByIdAsync(id);
+            var doctor = await _repository.GetByIdWithSpecialty(id);
             if (doctor is null)
             {
                 return Result<DoctorDto>.Failure($"Doctor with id {id} does not exist");
@@ -73,14 +73,14 @@ namespace Application.Services
 
         public async Task<Result<IEnumerable<DoctorDto>>> GetAll()
         { 
-            IEnumerable<Doctor> list = await _repository.GetAllAsync();
+            IEnumerable<Doctor> list = await _repository.GetAllWithSpecialty();
             var dto = list.ToListDto();
             return Result<IEnumerable<DoctorDto>>.Success(dto);
         }
 
         public async Task<Result<DoctorDto>> GetById(int id)
         {
-            Doctor doctor = await _repository.GetByIdAsync(id);
+            Doctor doctor = await _repository.GetByIdWithSpecialty(id);
             if (doctor is null)
             {
                 return Result<DoctorDto>.Failure($"Doctor with id {id} does not exist");

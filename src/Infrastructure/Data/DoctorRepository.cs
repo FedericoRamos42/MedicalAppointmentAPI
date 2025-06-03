@@ -17,6 +17,18 @@ namespace Infrastructure.Data
             _context = context;
         }
 
+        public async Task<IEnumerable<Doctor>> GetAllWithSpecialty()
+        {
+            var doctors = await _context.Doctors.Include(d => d.Specialty).ToListAsync();
+            return doctors;
+        }
+
+        public async Task<Doctor> GetByIdWithSpecialty(int id)
+        {
+            var doctor = await _context.Doctors.Include(d => d.Specialty).FirstOrDefaultAsync(d => d.Id == id);
+            return doctor;
+        }
+
         public async Task<Doctor> GetWithAvailabities(int id)
         {
             var doctor = await _context.Doctors.Include(d=>d.Availabilities)
@@ -24,5 +36,6 @@ namespace Infrastructure.Data
 
             return doctor;
         }
+        
     }
 }

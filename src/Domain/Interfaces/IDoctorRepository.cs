@@ -9,6 +9,8 @@ namespace Domain.Interfaces
 {
     public interface IDoctorRepository : IBaseRepository<Doctor>
     {
+        Task<Doctor> GetByIdWithSpecialty(int id);
         Task<Doctor> GetWithAvailabities(int id);
+        Task<IEnumerable<Doctor>> GetAllWithSpecialty();
     }
 }

@@ -48,7 +48,7 @@ namespace Web.Controllers
             return Ok(result);
         }
 
-        [HttpDelete("{Id}")]
+        [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
             var result = await _doctorService.Delete(id);

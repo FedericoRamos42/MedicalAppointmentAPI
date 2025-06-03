@@ -114,6 +114,7 @@ namespace Application.Services
             patient.PhoneNumber = request.PhoneNumber;
             patient.Email = request.Email;
             patient.Address = request.Address;
+            patient.IsAvailable = request.IsAvailable;
             patient.HealtInsurance = request.HealtInsurance;  
             
             await _repository.UpdateAsync(patient); 

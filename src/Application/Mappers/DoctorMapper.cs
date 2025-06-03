@@ -18,7 +18,6 @@ namespace Application.Mappers
             Email = doctor.Email,
             Address = doctor.Address,
             PhoneNumber = doctor.PhoneNumber,
-            SpecialtyId = doctor.SpecialtyId,
             SpecialtyName = doctor.Specialty?.Name,
             IsAvailable = doctor.IsAvailable
             
