@@ -14,8 +14,11 @@ namespace Application.Mappers
         {
             Id = medicalHistory.Id,
             Patient = medicalHistory.Patient.Name + " " + medicalHistory.Patient.LastName,
+            PatientId = medicalHistory.Patient.Id,
             Doctor = medicalHistory.Doctor.Name + " " + medicalHistory.Doctor.LastName,
+            DoctorId = medicalHistory.Doctor.Id,
             Appoinment = medicalHistory.Appoinment?.Date.ToString("yyyy-mm-dd"),
+            AppointmentId = medicalHistory.Appoinment?.Id ?? 0,
             ReasonForVisit = medicalHistory.ReasonForVisit,
             Diagnosis = medicalHistory.Diagnosis,
             Treatment = medicalHistory.Treatment,
