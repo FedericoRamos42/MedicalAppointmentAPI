@@ -113,7 +113,7 @@ namespace Application.Services
         }
         public async Task<Result<IEnumerable<MedicalHistoryDto>>> GetByDoctorIdAsync(int id)
         {
-            IEnumerable<MedicalHistory> medicalHistory = await _medicalHistoryRepository.Search(mh => mh.DoctorId == id, mh => mh.Patient, mh => mh.Appoinment);
+            IEnumerable<MedicalHistory> medicalHistory = await _medicalHistoryRepository.Search(mh => mh.DoctorId == id, mh => mh.Patient,mh=> mh.Doctor , mh => mh.Appoinment);
 
             var list = medicalHistory.ToListDto();
             return Result<IEnumerable<MedicalHistoryDto>>.Success(list);
