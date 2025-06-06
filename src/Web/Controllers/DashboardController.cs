@@ -30,5 +30,17 @@ namespace Web.Controllers
             }
             return Ok(result);
         }
+        [HttpGet("Patient/{id}")]
+        public async Task<IActionResult> GetPatientDashboard(int id)
+        {
+            var result = await _dashboardService.GetPatientDashboard(id);
+            if (!result.IsSuccess)
+            {
+                return NotFound(result);
+            }
+            return Ok(result);
+        }
+
+
     }
 }

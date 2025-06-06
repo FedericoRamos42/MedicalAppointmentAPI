@@ -12,6 +12,7 @@ namespace Application.Interfaces
     {
         Task<Result<DashboardAdminDto>> GetAdminDashboard();
         Task<Result<DashboardDoctorDto>> GetDoctorDashboard(int doctorId);
+        Task<Result<DashboardPatientDto>> GetPatientDashboard(int patientId);
 
     }
 }

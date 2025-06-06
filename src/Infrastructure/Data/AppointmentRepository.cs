@@ -24,7 +24,14 @@ namespace Infrastructure.Data
                                                 .ToListAsync();
             return appointments;
         }
-       
-       
+
+        public async Task<Appointment?> GetNextAppointmentByPatientId(int id)
+        {
+            var appointment = await _context.Appointments.Where(p => p.PatientId == id && p.Date >= DateTime.UtcNow && p.Status == Domain.Enums.AppointmentStatus.Confirmed)
+                                                         .OrderBy(p => p.Date)
+                                                         .FirstOrDefaultAsync();
+            return appointment;
+        }
     }
 }
+//date y time

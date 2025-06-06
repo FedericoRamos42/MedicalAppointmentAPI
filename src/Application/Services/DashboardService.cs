@@ -1,6 +1,8 @@
 ﻿using Application.Interfaces;
+using Application.Mappers;
 using Application.Models;
 using Application.Result;
+using Domain.Entities;
 using Domain.Interfaces;
 
 namespace Application.Services
@@ -10,11 +12,16 @@ namespace Application.Services
         private readonly IPatientRepository _repositoryPatient;
         private readonly IDoctorRepository _repositoryDoctor;
         private readonly IAppointmentRepository _repositoryAppointment;
-        public DashboardService(IDoctorRepository repositoryDoctor, IAppointmentRepository repositoryAppointment,IPatientRepository patientRepository)
+        private readonly IMedicalHistoryRepository _repositoryMedicalHistory;
+        public DashboardService(IDoctorRepository repositoryDoctor,
+            IAppointmentRepository repositoryAppointment,
+            IPatientRepository patientRepository,
+            IMedicalHistoryRepository medicalHistoryRepository)
         {
             _repositoryDoctor = repositoryDoctor;
             _repositoryAppointment = repositoryAppointment;
             _repositoryPatient = patientRepository;
+            _repositoryMedicalHistory = medicalHistoryRepository;
         }
 
         public async Task<Result<DashboardAdminDto>> GetAdminDashboard()
@@ -54,6 +61,27 @@ namespace Application.Services
                 MedicalHistoryTotal = 1
             };
             return Result<DashboardDoctorDto>.Success(dto);
+        }
+
+        public async Task<Result<DashboardPatientDto>> GetPatientDashboard(int patientId)
+        {
+            var confirmedAppointments = await _repositoryAppointment.CountAsync(a => a.PatientId == patientId && a.Status == Domain.Enums.AppointmentStatus.Confirmed);
+            var canceledAppointments = await _repositoryAppointment.CountAsync(a => a.PatientId == patientId && a.Status == Domain.Enums.AppointmentStatus.Canceled);
+            var nextAppointment = await _repositoryAppointment.GetNextAppointmentByPatientId(patientId);
+            var lastMedicalHistory = await _repositoryMedicalHistory.GetLastMedicalHistoryByPatient(patientId);
+            var totalMeidcalHistory = await _repositoryMedicalHistory.CountAsync(a => a.PatientId == patientId);
+
+            var dto = new DashboardPatientDto()
+            {
+                AppointmentsConfirmed = confirmedAppointments,
+                AppointmentsCanceled = canceledAppointments,
+                NextAppointment = nextAppointment?.ToDto(),
+                LastMedicalHistory = lastMedicalHistory?.ToDto(),
+                MedicalHistoryTotal = totalMeidcalHistory
+            };
+
+            return Result<DashboardPatientDto>.Success(dto);
+
         }
     }
 }

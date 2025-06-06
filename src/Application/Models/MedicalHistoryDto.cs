@@ -20,5 +20,6 @@ namespace Application.Models
         public string Diagnosis { get; set; } = default!;
         public string? Treatment { get; set; } = default!;
         public string? Notes { get; set; }
+        public DateTime CreatedAt { get; set; }
     }
 }

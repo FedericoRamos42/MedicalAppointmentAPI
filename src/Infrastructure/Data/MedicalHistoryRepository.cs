@@ -20,9 +20,9 @@ namespace Infrastructure.Data
         public async Task<IEnumerable<MedicalHistory>> GetAll()
         {
             var entities = await _context.MedicalHistories.Include(mh => mh.Patient)
-                                                           .Include(mh => mh.Doctor)
-                                                            .Include(mh => mh.Appoinment)
-                                                             .ToListAsync();
+                                                          .Include(mh => mh.Doctor)
+                                                          .Include(mh => mh.Appoinment)
+                                                          .ToListAsync();
             return entities;
         }
 
@@ -32,6 +32,16 @@ namespace Infrastructure.Data
                                                            .Include(mh => mh.Doctor)
                                                             .Include(mh => mh.Appoinment)
                                                              .FirstOrDefaultAsync(mh=>mh.Id == id);
+            return entity;
+        }
+
+        public async Task<MedicalHistory?> GetLastMedicalHistoryByPatient(int id)
+        {
+            var entity = await _context.MedicalHistories.Where(m => m.PatientId == id)
+                                                        .Include(m=>m.Patient)
+                                                        .Include(m=>m.Doctor)
+                                                        .OrderBy(m => m.CreatedAt)
+                                                        .FirstOrDefaultAsync();
             return entity;
         }
     }

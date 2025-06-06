@@ -23,6 +23,7 @@ namespace Application.Mappers
             Diagnosis = medicalHistory.Diagnosis,
             Treatment = medicalHistory.Treatment,
             Notes = medicalHistory.Notes,
+            CreatedAt = medicalHistory.CreatedAt
         };
         public static List<MedicalHistoryDto> ToListDto(this IEnumerable<MedicalHistory> medicalHistories) => medicalHistories.Select(x => ToDto(x)).ToList();
     }

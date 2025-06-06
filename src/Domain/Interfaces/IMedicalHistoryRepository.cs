@@ -11,5 +11,6 @@ namespace Domain.Interfaces
     {
         Task<MedicalHistory> GetById(int id);
         Task<IEnumerable<MedicalHistory>> GetAll();
+        Task<MedicalHistory?> GetLastMedicalHistoryByPatient(int id);
     }
 }
