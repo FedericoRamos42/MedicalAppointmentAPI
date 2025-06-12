@@ -29,6 +29,7 @@ namespace Infrastructure.Data
         {
             var appointment = await _context.Appointments.Where(p => p.PatientId == id && p.Date >= DateTime.UtcNow && p.Status == Domain.Enums.AppointmentStatus.Confirmed)
                                                          .OrderBy(p => p.Date)
+                                                         
                                                          .FirstOrDefaultAsync();
             return appointment;
         }

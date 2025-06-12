@@ -3,6 +3,7 @@ using Application.Interfaces;
 using Application.Mappers;
 using Application.Models;
 using Application.Models.Request;
+using Application.Models.Response;
 using Application.Result;
 using Domain.Abstractions;
 using Domain.Entities;
@@ -98,28 +99,52 @@ namespace Application.Services
             return Result<IEnumerable<AppointmentDto>>.Success(dtos);
         }
 
-        public async Task<Result<IEnumerable<AppointmentDto>>> GetByPatient(int patientId)
+        public async Task<Result<IEnumerable<AppointmentResponse>>> GetByPatient(int patientId)
         {
             var patient = await _patientRepository.GetByIdAsync(patientId);
             if (patient == null)
             {
-                return Result<IEnumerable<AppointmentDto>>.Failure($"Patient with id {patientId} that not exist");
+                return Result<IEnumerable<AppointmentResponse>>.Failure($"Patient with id {patientId} that not exist");
             }
-            List<Appointment> appointments = (List<Appointment>) await _appointmentRepository.Search(u => u.PatientId == patientId);
-            var dtos = appointments.ToListDto();
-            return Result<IEnumerable<AppointmentDto>>.Success(dtos);
+            List<Appointment> appointments = (List<Appointment>) await _appointmentRepository.Search(u => u.PatientId == patientId, u => u.Doctor, u => u.Patient);
+            var dtos = appointments.Select(x => new AppointmentResponse
+            {
+                Id = x.Id,
+                DoctorId = x.DoctorId,
+                PatientId = x.PatientId,
+                DoctorName = x.Doctor.Name + " " + x.Doctor.LastName,
+                PatientName = x.Patient.Name + " " + x.Patient.LastName,
+                AppointmentInfo = x.Date.ToString("yyyy-MM-dd") + " " + x.Time + " " + x.Patient.Name,
+                Time = x.Time,
+                Date = x.Date.ToString("yyyy-MM-dd"),
+                Status = x.Status,
+
+            });
+            return Result<IEnumerable<AppointmentResponse>>.Success(dtos);
         }
 
-        public async Task<Result<IEnumerable<AppointmentDto>>> GetByDoctor(int doctorId)
+        public async Task<Result<IEnumerable<AppointmentResponse>>> GetByDoctor(int doctorId)
         {
             var doctor = await _doctorRepository.GetByIdAsync(doctorId);
             if (doctor == null)
             {
-                return Result<IEnumerable<AppointmentDto>>.Failure($"Patient with id {doctorId} that not exist");
+                return Result<IEnumerable<AppointmentResponse>>.Failure($"Patient with id {doctorId} that not exist");
             }
-            List<Appointment> appointments = (List<Appointment>) await _appointmentRepository.Search(u => u.DoctorId == doctorId);
-            var dtos = appointments.ToListDto();
-            return Result<IEnumerable<AppointmentDto>>.Success(dtos);
+            List<Appointment> appointments = (List<Appointment>) await _appointmentRepository.Search(u => u.DoctorId == doctorId,u=>u.Doctor, u=>u.Patient);
+            var dtos = appointments.Select(x => new AppointmentResponse
+            {
+                Id = x.Id,
+                DoctorId = x.DoctorId,
+                PatientId = x.PatientId,
+                DoctorName = x.Doctor.Name + " " + x.Doctor.LastName,
+                PatientName = x.Patient.Name + " " + x.Patient.LastName,
+                AppointmentInfo = x.Date.ToString("yyyy-MM-dd") + " " + x.Time + " " + x.Patient.Name,
+                Time = x.Time,
+                Date = x.Date.ToString("yyyy-MM-dd"),
+                Status = x.Status,
+
+            });
+            return Result<IEnumerable<AppointmentResponse>>.Success(dtos);
         }
 
         public async Task<Result<IEnumerable<AppointmentDto>>> GetByStatus(int id, AppointmentStatus status)

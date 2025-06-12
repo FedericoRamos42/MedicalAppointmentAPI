@@ -99,7 +99,7 @@ namespace Infrastructure.Services
 
             var token = GenerateToken(claims);
 
-            var link = $"http://localhost:4200/reset-password?token={token}";
+            var link = $"http://localhost:5173/reset-password?token={token}";
 
             var emailDto = new EmailDto
             {
