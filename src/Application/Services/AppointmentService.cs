@@ -54,6 +54,15 @@ namespace Application.Services
                 return Result<AppointmentDto>.Failure($"Patient with Id {request.DoctorId} that not exist");
             }
 
+            var appointmentDateTime = request.Date.Date + request.Time;
+            Console.WriteLine($"{appointmentDateTime}");
+
+            if (appointmentDateTime < DateTime.Now ) {
+
+                return Result<AppointmentDto>.Failure("error");
+            }
+           
+
             Appointment appointment = new Appointment()
             {
                 PatientId = request.PatientId,
