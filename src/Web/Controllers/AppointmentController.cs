@@ -113,13 +113,6 @@ namespace Web.Controllers
         {
             var result = await _appointmentService.GetPaginated(pageIndex, pageSize);
             return Ok(result);
-        }
-
-        [HttpPost("email")]
-        public IActionResult SendEmail(EmailDto request)
-        {
-            _emailService.SendEmail(request);
-            return Ok();
-        }
+        }       
     }
 }

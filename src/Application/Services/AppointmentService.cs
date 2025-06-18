@@ -20,17 +20,20 @@ namespace Application.Services
         private readonly IDoctorRepository _doctorRepository;
         private readonly IPatientRepository _patientRepository;
         private readonly IValidator<AppointmentCreateRequest> _createValidator;
+        private readonly IEmailService _emailService;
         public AppointmentService(IAppointmentRepository appointmentRepository,
                                   IDoctorRepository doctorRepository,
                                   IPatientRepository patientRepository,
                                   IAvailabilityRepository availabilityRepository,
-                                  IValidator<AppointmentCreateRequest> createValidator)
+                                  IValidator<AppointmentCreateRequest> createValidator,
+                                  IEmailService emailService)
         {
             _appointmentRepository = appointmentRepository;
             _doctorRepository = doctorRepository;
             _patientRepository = patientRepository;
             _availabilityRepository = availabilityRepository;
             _createValidator = createValidator;
+            _emailService = emailService;
         }
 
         public async Task<Result<AppointmentDto>> Create(AppointmentCreateRequest request)
@@ -75,6 +78,30 @@ namespace Application.Services
 
             await _appointmentRepository.AddAsync(appointment);
             var dto = appointment.ToDto();
+
+            var emailHtml = $@"
+                         <html>
+                            <body style='font-family: Arial, sans-serif;'>
+                                <h2>Confirmación de Turno</h2>
+                                    <p>Hola {patient.Name} {patient.LastName} ,</p>
+                                    <p>Tu turno con el Dr./Dra. {doctor.Name} {doctor.LastName} ha sido confirmado.</p>
+                                    <p>
+                                        <strong>Fecha:</strong> {appointment.Date:dd/MM/yyyy}<br/>
+                                        <strong>Hora:</strong> {appointment.Time.ToString(@"hh\:mm")}
+                                    </p>
+                                    <p>Gracias por elegirnos.</p>
+                            </body>
+                       </html>";
+
+            var email = new EmailDto
+            {
+                Para = patient.Email,
+                Asunto = "Confirmación de turno",
+                Contenido = emailHtml
+            };
+
+            _emailService.SendEmail(email);
+
             return Result<AppointmentDto>.Success(dto);
 
         }
