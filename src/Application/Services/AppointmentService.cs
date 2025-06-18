@@ -79,28 +79,28 @@ namespace Application.Services
             await _appointmentRepository.AddAsync(appointment);
             var dto = appointment.ToDto();
 
-            var emailHtml = $@"
-                         <html>
-                            <body style='font-family: Arial, sans-serif;'>
-                                <h2>Confirmación de Turno</h2>
-                                    <p>Hola {patient.Name} {patient.LastName} ,</p>
-                                    <p>Tu turno con el Dr./Dra. {doctor.Name} {doctor.LastName} ha sido confirmado.</p>
-                                    <p>
-                                        <strong>Fecha:</strong> {appointment.Date:dd/MM/yyyy}<br/>
-                                        <strong>Hora:</strong> {appointment.Time.ToString(@"hh\:mm")}
-                                    </p>
-                                    <p>Gracias por elegirnos.</p>
-                            </body>
-                       </html>";
+            //var emailHtml = $@"
+            //             <html>
+            //                <body style='font-family: Arial, sans-serif;'>
+            //                    <h2>Confirmación de Turno</h2>
+            //                        <p>Hola {patient.Name} {patient.LastName} ,</p>
+            //                        <p>Tu turno con el Dr./Dra. {doctor.Name} {doctor.LastName} ha sido confirmado.</p>
+            //                        <p>
+            //                            <strong>Fecha:</strong> {appointment.Date:dd/MM/yyyy}<br/>
+            //                            <strong>Hora:</strong> {appointment.Time.ToString(@"hh\:mm")}
+            //                        </p>
+            //                        <p>Gracias por elegirnos.</p>
+            //                </body>
+            //           </html>";
 
-            var email = new EmailDto
-            {
-                Para = patient.Email,
-                Asunto = "Confirmación de turno",
-                Contenido = emailHtml
-            };
+            //var email = new EmailDto
+            //{
+            //    Para = patient.Email,
+            //    Asunto = "Confirmación de turno",
+            //    Contenido = emailHtml
+            //};
 
-            _emailService.SendEmail(email);
+            //_emailService.SendEmail(email);
 
             return Result<AppointmentDto>.Success(dto);
 
